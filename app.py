@@ -7,6 +7,8 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 import time
 import warnings
 warnings.filterwarnings('ignore')
@@ -265,9 +267,75 @@ def train_and_evaluate_model(data_dict, sequence_length, target_station='NON', e
     
     return rmse, mae, predictions, actuals, elapsed_time
 
+def train_and_evaluate_rf_model(data_dict, sequence_length, target_station='NON', n_estimators=100, max_depth=None):
+    """Train and evaluate a Random Forest model with given sequence length"""
+    start_time = time.time()
+    
+    print(f"  Creating sequences (length={sequence_length})...")
+    # Create sequences (same as LSTM)
+    sequences, targets = create_sequences(data_dict, sequence_length, target_station)
+    print(f"  Created {len(sequences)} sequences")
+    
+    # Flatten sequences for Random Forest (RF works with flat features)
+    n_samples, seq_len, n_features = sequences.shape
+    # Reshape to (n_samples, seq_len * n_features) - flatten the sequence dimension
+    sequences_flat = sequences.reshape(n_samples, seq_len * n_features)
+    
+    # Normalize data
+    scaler_X = MinMaxScaler()
+    sequences_scaled = scaler_X.fit_transform(sequences_flat)
+    
+    # Scale targets
+    scaler_y = MinMaxScaler()
+    targets_reshaped = targets.reshape(-1, 1)
+    targets_scaled = scaler_y.fit_transform(targets_reshaped).flatten()
+    
+    # Split data (same split as LSTM for fair comparison)
+    X_train, X_temp, y_train, y_temp = train_test_split(
+        sequences_scaled, targets_scaled, test_size=0.3, random_state=42, shuffle=False
+    )
+    X_val, X_test, y_val, y_test = train_test_split(
+        X_temp, y_temp, test_size=0.5, random_state=42, shuffle=False
+    )
+    
+    # Combine train and validation for Random Forest (RF doesn't need separate validation)
+    X_train_full = np.vstack([X_train, X_val])
+    y_train_full = np.concatenate([y_train, y_val])
+    
+    # Create and train Random Forest model
+    print(f"  Creating and training Random Forest model...")
+    rf_model = RandomForestRegressor(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        random_state=42,
+        n_jobs=-1,
+        verbose=0
+    )
+    
+    rf_model.fit(X_train_full, y_train_full)
+    
+    print(f"  Evaluating model...")
+    
+    # Make predictions on test set
+    predictions_scaled = rf_model.predict(X_test)
+    
+    # Inverse transform predictions and actuals
+    predictions = scaler_y.inverse_transform(predictions_scaled.reshape(-1, 1)).flatten()
+    actuals = scaler_y.inverse_transform(y_test.reshape(-1, 1)).flatten()
+    
+    # Calculate metrics
+    mse = mean_squared_error(actuals, predictions)
+    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(actuals, predictions)
+    
+    # Calculate time
+    elapsed_time = time.time() - start_time
+    
+    return rmse, mae, predictions, actuals, elapsed_time
+
 def main():
     print("=" * 60)
-    print("Water Level Prediction using LSTM")
+    print("Water Level Prediction - Comparative Model Analysis")
     print("Predicting NON station using CSA, LUA, CKH, VIE stations")
     print("=" * 60)
     
@@ -283,9 +351,14 @@ def main():
     print(f"Sequence lengths to test: {sequence_lengths}")
     print("=" * 60)
     
+    # Test LSTM models
+    print("\n" + "=" * 60)
+    print("TRAINING LSTM MODELS")
+    print("=" * 60)
+    
     for seq_len in sequence_lengths:
         print(f"\n{'='*60}")
-        print(f"Testing Sequence Length: {seq_len} days")
+        print(f"LSTM - Testing Sequence Length: {seq_len} days")
         print(f"{'='*60}")
         
         try:
@@ -296,6 +369,44 @@ def main():
             # Store results
             result = {
                 'ModelName': 'LSTM',
+                'SequenceLength': seq_len,
+                'RMSE': f"{rmse:.4f}",
+                'MAE': f"{mae:.4f}",
+                'MeanActual': np.mean(actuals),
+                'MeanPredicted': np.mean(predictions),
+                'RMSE%': (rmse / np.mean(actuals) * 100),
+                'MAE%': (mae / np.mean(actuals) * 100),
+                'TimeSeconds': f"{elapsed_time:.2f}"
+            }
+            all_results.append(result)
+            
+            print(f"\nResults for Sequence Length {seq_len}:")
+            print(f"  RMSE: {rmse:.4f}")
+            print(f"  MAE: {mae:.4f}")
+            print(f"  Time: {elapsed_time:.2f} seconds")
+            
+        except Exception as e:
+            print(f"Error with sequence length {seq_len}: {str(e)}")
+            continue
+    
+    # Test Random Forest models
+    print("\n" + "=" * 60)
+    print("TRAINING RANDOM FOREST MODELS")
+    print("=" * 60)
+    
+    for seq_len in sequence_lengths:
+        print(f"\n{'='*60}")
+        print(f"Random Forest - Testing Sequence Length: {seq_len} days")
+        print(f"{'='*60}")
+        
+        try:
+            rmse, mae, predictions, actuals, elapsed_time = train_and_evaluate_rf_model(
+                data_dict, seq_len, target_station='NON', n_estimators=100, max_depth=None
+            )
+            
+            # Store results
+            result = {
+                'ModelName': 'RandomForest',
                 'SequenceLength': seq_len,
                 'RMSE': f"{rmse:.4f}",
                 'MAE': f"{mae:.4f}",
