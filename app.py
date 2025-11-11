@@ -57,21 +57,15 @@ class LSTMModel(nn.Module):
 
 def load_station_data(data_folder='data'):
     """Load all station CSV files and extract AVG water levels"""
-    stations = {
-        'CSA': 'Chiang Saen_CSA_seasonal_dry_*.csv',
-        'LUA': 'Luang Prabang_LUA_seasonal_dry_*.csv',
-        'CKH': 'Chiang Khan_CKH_seasonal_dry_*.csv',
-        'VIE': 'Vientiane_VIE_seasonal_dry_*.csv',
-        'NON': 'Nongkhai_NON_seasonal_dry_*.csv'
-    }
+    stations = ['CSA', 'LUA', 'CKH', 'VIE', 'NON']
     
     data_dict = {}
     
-    for station_code, pattern in stations.items():
-        # Find matching file
-        files = [f for f in os.listdir(data_folder) if station_code in f and f.endswith('.csv')]
-        if files:
-            file_path = os.path.join(data_folder, files[0])
+    for station_code in stations:
+        # Load file directly by name
+        file_path = os.path.join(data_folder, f'{station_code}.csv')
+        
+        if os.path.exists(file_path):
             df = pd.read_csv(file_path)
             
             # Parse date and sort (handle invalid dates)
@@ -83,6 +77,8 @@ def load_station_data(data_folder='data'):
             # Extract AVG column (average water level)
             data_dict[station_code] = df[['date_gmt', 'AVG']].copy()
             print(f"Loaded {station_code}: {len(df)} records")
+        else:
+            print(f"Warning: File not found for {station_code}: {file_path}")
     
     return data_dict
 
@@ -332,7 +328,28 @@ def train_and_evaluate_rf_model(data_dict, sequence_length, target_station='NON'
     elapsed_time = time.time() - start_time
     
     return rmse, mae, predictions, actuals, elapsed_time
-
+###
+# 2024	2007	17
+# 30	4	120
+# 30	1	360
+# 30	2	720
+# 30	3	1080
+# 30	4	1440
+# 30	5	1800
+# 30	6	2160
+# 30	7	2520
+# 30	8	2880
+# 30	9	3240
+# 30	10	3600
+# 30	11	3960
+# 30	12	4320
+# 30	13	4680
+# 30	14	5040
+# 30	15	5400
+# 30	16	5760
+# 30	17	6120
+# 30	18	6480
+###
 def main():
     print("=" * 60)
     print("Water Level Prediction - Comparative Model Analysis")
@@ -344,7 +361,8 @@ def main():
     data_dict = load_station_data('data')
     
     # Test different sequence lengths
-    sequence_lengths = [30, 60, 90, 120, 180, 360]
+    # as day
+    sequence_lengths = [120, 360, 720, 1080, 1440, 1800, 2160, 2520, 2880, 3240, 3600, 3960, 4320, 4680, 5040, 5400, 5760, 6120, 6480]
     all_results = []
     
     print("\n[2/5] Testing multiple sequence lengths...")
