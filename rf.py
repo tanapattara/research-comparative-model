@@ -8,11 +8,131 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
 import json
 import time
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for saving images
+import matplotlib.pyplot as plt
 from datetime import datetime
 warnings.filterwarnings('ignore')
 
 # Set random seed for reproducibility
 np.random.seed(42)
+
+def create_test_graph(predictions_df, model_name, result_dir, target_col):
+    """Create a line graph comparing test predictions vs actuals for the entire test set"""
+    try:
+        # Check if date column exists
+        if 'date' not in predictions_df.columns:
+            print(f"  ⚠ Warning: No date column found for {model_name}. Skipping test graph generation.")
+            return
+        
+        # Convert date to datetime
+        predictions_df['date'] = pd.to_datetime(predictions_df['date'], errors='coerce')
+        
+        # Remove rows where actual or predicted is null
+        test_data = predictions_df.copy()
+        test_data = test_data[
+            (test_data['actual'].notna()) & 
+            (test_data['predicted'].notna())
+        ]
+        
+        if len(test_data) == 0:
+            print(f"  ⚠ Warning: No valid test data for {model_name}. Skipping test graph generation.")
+            return
+        
+        # Sort by date
+        test_data = test_data.sort_values('date')
+        
+        # Create the plot
+        plt.figure(figsize=(14, 6))
+        plt.plot(test_data['date'], test_data['actual'], 
+                label='Actual', linewidth=2, marker='o', markersize=2, alpha=0.7, color='blue')
+        plt.plot(test_data['date'], test_data['predicted'], 
+                label='Predicted', linewidth=2, marker='s', markersize=2, alpha=0.7, color='red')
+        
+        plt.xlabel('Date', fontsize=12, fontweight='bold')
+        plt.ylabel('Water Level', fontsize=12, fontweight='bold')
+        plt.title(f'{model_name.upper()} Model: 2025 Validation Set - Predictions vs Actuals', fontsize=14, fontweight='bold')
+        plt.legend(fontsize=11)
+        plt.grid(True, alpha=0.3)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        
+        # Save the image
+        graph_file = os.path.join(result_dir, f'{model_name}_test_graph.png')
+        plt.savefig(graph_file, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        print(f"  ✓ Test graph saved to: {graph_file}")
+        
+    except Exception as e:
+        print(f"  ⚠ Warning: Error creating test graph for {model_name}: {str(e)}")
+
+def create_prediction_graph(predictions_df, model_name, result_dir, target_col):
+    """Create a line graph comparing predictions vs actuals for 2025 data (or most recent year)"""
+    try:
+        # Check if date column exists
+        if 'date' not in predictions_df.columns:
+            print(f"  ⚠ Warning: No date column found for {model_name}. Skipping prediction graph generation.")
+            return
+        
+        # Convert date to datetime
+        predictions_df['date'] = pd.to_datetime(predictions_df['date'], errors='coerce')
+        
+        # Filter for 2025 data, or use most recent year if 2025 doesn't exist
+        year_2025_data = predictions_df[predictions_df['date'].dt.year == 2025]
+        
+        if len(year_2025_data) == 0:
+            # Use most recent year available
+            most_recent_year = predictions_df['date'].dt.year.max()
+            year_2025_data = predictions_df[predictions_df['date'].dt.year == most_recent_year]
+            print(f"  ℹ No 2025 data found. Using {most_recent_year} data instead.")
+        
+        # Remove rows where actual or predicted is 0 or null
+        year_2025_data = year_2025_data.copy()
+        year_2025_data = year_2025_data[
+            (year_2025_data['actual'].notna()) & 
+            (year_2025_data['predicted'].notna()) &
+            (year_2025_data['actual'] != 0) & 
+            (year_2025_data['predicted'] != 0)
+        ]
+        
+        if len(year_2025_data) == 0:
+            print(f"  ⚠ Warning: No valid data after filtering for {model_name}. Skipping prediction graph generation.")
+            return
+        
+        # Sort by date
+        year_2025_data = year_2025_data.sort_values('date')
+        
+        # Create the plot
+        plt.figure(figsize=(12, 6))
+        plt.plot(year_2025_data['date'], year_2025_data['actual'], 
+                label='Actual', linewidth=2, marker='o', markersize=3, alpha=0.7, color='blue')
+        plt.plot(year_2025_data['date'], year_2025_data['predicted'], 
+                label='Predicted', linewidth=2, marker='s', markersize=3, alpha=0.7, color='red')
+        
+        year_label = year_2025_data['date'].dt.year.iloc[0] if len(year_2025_data) > 0 else 2025
+        plt.xlabel(f'Date (Year {year_label})', fontsize=12, fontweight='bold')
+        plt.ylabel('Water Level', fontsize=12, fontweight='bold')
+        plt.title(f'{model_name.upper()} Model: Prediction vs Actual Water Level ({year_label})', fontsize=14, fontweight='bold')
+        plt.legend(fontsize=11)
+        plt.grid(True, alpha=0.3)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        
+        # Save the image
+        graph_file = os.path.join(result_dir, f'{model_name}_prediction_graph.png')
+        plt.savefig(graph_file, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        # Save filtered data to CSV
+        filtered_data_file = os.path.join(result_dir, f'{model_name}_2025_data.csv')
+        year_2025_data.to_csv(filtered_data_file, index=False)
+        
+        print(f"  ✓ Prediction graph saved to: {graph_file}")
+        print(f"  ✓ Filtered data saved to: {filtered_data_file}")
+        
+    except Exception as e:
+        print(f"  ⚠ Warning: Error creating prediction graph for {model_name}: {str(e)}")
 
 def main():
     # Record start time
@@ -46,6 +166,13 @@ def main():
         print(f"Error: Missing columns: {missing_cols}")
         return
     
+    # Extract dates if available
+    has_date = 'date' in df.columns or 'date_gmt' in df.columns
+    if has_date:
+        date_col = 'date' if 'date' in df.columns else 'date_gmt'
+        df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+        dates = df[date_col].values
+    
     # Extract features and target
     X_data = df[feature_cols].values
     y_data = df[target_col].values
@@ -54,13 +181,50 @@ def main():
     valid_mask = ~(np.isnan(X_data).any(axis=1) | np.isnan(y_data))
     X_data = X_data[valid_mask]
     y_data = y_data[valid_mask]
+    if has_date:
+        dates = dates[valid_mask]
     
     print(f"\nAfter removing NaN values: {len(X_data)} samples")
     
-    # Split into train and test sets (80-20 split)
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_data, y_data, test_size=0.2, random_state=42, shuffle=True
-    )
+    # Split into train and test sets based on year 2025
+    # Training: all data before 2025
+    # Testing: only 2025 data
+    if has_date:
+        # Convert dates to pandas Series for easier filtering
+        dates_series = pd.Series(dates)
+        # Find data points in 2025
+        is_2025 = dates_series.dt.year == 2025
+        is_2025_array = is_2025.values
+        
+        train_mask = ~is_2025_array
+        test_mask = is_2025_array
+        
+        X_train = X_data[train_mask]
+        X_test = X_data[test_mask]
+        y_train = y_data[train_mask]
+        y_test = y_data[test_mask]
+        test_dates = dates[test_mask]
+        
+        print(f"\nSplitting by year:")
+        print(f"  Training: All data before 2025")
+        print(f"  Testing: Only 2025 data")
+        print(f"  Train set: {len(X_train)} samples")
+        print(f"  Test set: {len(X_test)} samples")
+        if len(X_test) == 0:
+            print(f"  ⚠ Warning: No 2025 data found! Using last 20% of data as test set.")
+            indices = np.arange(len(X_data))
+            X_train, X_test, y_train, y_test, train_indices, test_indices = train_test_split(
+                X_data, y_data, indices, test_size=0.2, random_state=42, shuffle=False
+            )
+            test_dates = dates[test_indices]
+    else:
+        # Fallback to 80-20 split if no dates available
+        print(f"\nNo date information available. Using 80-20 split.")
+        indices = np.arange(len(X_data))
+        X_train, X_test, y_train, y_test, train_indices, test_indices = train_test_split(
+            X_data, y_data, indices, test_size=0.2, random_state=42, shuffle=False
+        )
+        test_dates = []
     
     print(f"\nTrain set: {len(X_train)} samples")
     print(f"Test set: {len(X_test)} samples")
@@ -232,14 +396,33 @@ def main():
     
     # Save predictions vs actuals to CSV
     predictions_file = os.path.join(result_dir, f'{model_name}_predictions.csv')
-    predictions_df = pd.DataFrame({
-        'index': range(len(y_test)),
-        'actual': y_test,
-        'predicted': y_test_pred,
-        'error': y_test - y_test_pred,
-        'error_percent': ((y_test - y_test_pred) / y_test * 100)
-    })
+    if has_date and len(test_dates) == len(y_test):
+        predictions_df = pd.DataFrame({
+            'date': test_dates,
+            'actual': y_test,
+            'predicted': y_test_pred,
+            'error': y_test - y_test_pred,
+            'error_percent': ((y_test - y_test_pred) / y_test * 100)
+        })
+    else:
+        predictions_df = pd.DataFrame({
+            'index': range(len(y_test)),
+            'actual': y_test,
+            'predicted': y_test_pred,
+            'error': y_test - y_test_pred,
+            'error_percent': ((y_test - y_test_pred) / y_test * 100)
+        })
     predictions_df.to_csv(predictions_file, index=False)
+    
+    # Create visualizations
+    print(f"\nCreating visualizations...")
+    if has_date:
+        print(f"  Date column found, generating graphs...")
+        create_test_graph(predictions_df, model_name, result_dir, target_col)
+        create_prediction_graph(predictions_df, model_name, result_dir, target_col)
+    else:
+        print(f"  ⚠ Warning: No date column found. Skipping graph generation.")
+        print(f"  Available columns: {list(df.columns)}")
     
     # Save metrics to JSON
     metrics_json = {

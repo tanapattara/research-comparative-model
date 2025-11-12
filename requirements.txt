@@ -8,3 +8,11 @@ torch>=2.0.0
 
 # Time series models
 statsmodels>=0.14.0
+
+# Visualization
+matplotlib>=3.7.0
+
+# Web scraping (for data loader)
+requests>=2.31.0
+selenium>=4.15.0
+beautifulsoup4>=4.12.0

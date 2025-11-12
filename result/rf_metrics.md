@@ -1,6 +1,6 @@
 # Random Forest Model Results
 
-**Generated on:** 2025-11-12 16:02:25
+**Generated on:** 2025-11-12 22:06:03
 
 ## Model Architecture
 
@@ -14,31 +14,31 @@
 
 ## Feature Importance
 
-- **CKH:** 0.8589 (85.89%)
-- **VIE:** 0.1213 (12.13%)
-- **CSA:** 0.0139 (1.39%)
-- **LUA:** 0.0059 (0.59%)
+- **VIE:** 0.8639 (86.39%)
+- **CKH:** 0.1241 (12.41%)
+- **LUA:** 0.0084 (0.84%)
+- **CSA:** 0.0036 (0.36%)
 
 ## Training Set Performance
 
-- **Mean Squared Error (MSE):** 0.0310
-- **Root Mean Squared Error (RMSE):** 0.1760
-- **Mean Absolute Error (MAE):** 0.0749
-- **R² Score:** 0.9965
-- **Accuracy (R² × 100):** 99.65%
-- **MAPE:** nan%
+- **Mean Squared Error (MSE):** 0.0136
+- **Root Mean Squared Error (RMSE):** 0.1166
+- **Mean Absolute Error (MAE):** 0.0729
+- **R² Score:** 0.9982
+- **Accuracy (R² × 100):** 99.82%
+- **MAPE:** 2.30%
 
 ## Test Set Performance
 
-- **Mean Squared Error (MSE):** 0.0613
-- **Root Mean Squared Error (RMSE):** 0.2477
-- **Mean Absolute Error (MAE):** 0.1478
-- **R² Score:** 0.9928
-- **Accuracy (R² × 100):** 99.28%
-- **MAPE:** nan%
+- **Mean Squared Error (MSE):** 0.0464
+- **Root Mean Squared Error (RMSE):** 0.2154
+- **Mean Absolute Error (MAE):** 0.1370
+- **R² Score:** 0.9937
+- **Accuracy (R² × 100):** 99.37%
+- **MAPE:** 4.43%
 
 ## Timing Information
 
-- **Start time:** 2025-11-12 16:02:25
-- **End time:** 2025-11-12 16:02:25
-- **Duration:** 0.25 seconds (0.00 minutes)
+- **Start time:** 2025-11-12 22:06:03
+- **End time:** 2025-11-12 22:06:03
+- **Duration:** 0.23 seconds (0.00 minutes)

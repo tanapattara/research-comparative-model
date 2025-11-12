@@ -1,6 +1,6 @@
 # LSTM Model Results
 
-**Generated on:** 2025-11-12 16:02:25
+**Generated on:** 2025-11-12 22:03:46
 
 ## Model Architecture
 
@@ -13,15 +13,15 @@
 
 ## Performance Metrics
 
-- **Mean Squared Error (MSE):** 0.6104
-- **Root Mean Squared Error (RMSE):** 0.7813
-- **Mean Absolute Error (MAE):** 0.3577
-- **R² Score:** 0.9587
-- **Accuracy (R² × 100):** 95.87%
-- **MAPE:** inf%
+- **Mean Squared Error (MSE):** 0.1332
+- **Root Mean Squared Error (RMSE):** 0.3649
+- **Mean Absolute Error (MAE):** 0.2585
+- **R² Score:** 0.9831
+- **Accuracy (R² × 100):** 98.31%
+- **MAPE:** 9.57%
 
 ## Timing Information
 
-- **Start time:** 2025-11-12 16:00:11
-- **End time:** 2025-11-12 16:02:25
-- **Duration:** 133.15 seconds (2.22 minutes)
+- **Start time:** 2025-11-12 22:01:15
+- **End time:** 2025-11-12 22:03:46
+- **Duration:** 150.86 seconds (2.51 minutes)
