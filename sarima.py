@@ -6,10 +6,58 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.stats.diagnostic import acorr_ljungbox
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
+import threading
+import time
+import sys
+import json
+from datetime import datetime
 warnings.filterwarnings('ignore')
 
 # Set random seed for reproducibility
 np.random.seed(42)
+
+class ProgressIndicator:
+    """Thread-safe progress indicator for long-running operations"""
+    def __init__(self, message="Processing", interval=5):
+        self.message = message
+        self.interval = interval
+        self.running = False
+        self.thread = None
+        self.start_time = None
+    
+    def _show_progress(self):
+        """Show periodic progress updates"""
+        elapsed = 0
+        while self.running:
+            time.sleep(self.interval)
+            if self.running:
+                elapsed += self.interval
+                minutes = elapsed // 60
+                seconds = elapsed % 60
+                if minutes > 0:
+                    print(f"  ⏳ {self.message}... ({minutes}m {seconds}s elapsed)", flush=True)
+                else:
+                    print(f"  ⏳ {self.message}... ({seconds}s elapsed)", flush=True)
+    
+    def start(self):
+        """Start the progress indicator"""
+        self.running = True
+        self.start_time = time.time()
+        self.thread = threading.Thread(target=self._show_progress, daemon=True)
+        self.thread.start()
+    
+    def stop(self):
+        """Stop the progress indicator"""
+        self.running = False
+        if self.thread:
+            self.thread.join(timeout=1)
+        elapsed = time.time() - self.start_time if self.start_time else 0
+        minutes = int(elapsed // 60)
+        seconds = int(elapsed % 60)
+        if minutes > 0:
+            print(f"  ✓ Completed in {minutes}m {seconds}s", flush=True)
+        else:
+            print(f"  ✓ Completed in {seconds}s", flush=True)
 
 def check_stationarity(timeseries):
     """Check if time series is stationary using Augmented Dickey-Fuller test"""
@@ -63,10 +111,15 @@ def find_optimal_sarima(train_data, seasonal_period=365, max_p=3, max_d=2, max_q
     return best_params, best_model
 
 def main():
+    # Record start time
+    start_time = time.time()
+    start_datetime = datetime.now()
+    
     print("=" * 60)
     print("Water Level Prediction - SARIMA Model")
     print("Predicting NON station using time series analysis")
     print("=" * 60)
+    print(f"Start time: {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Load data
     data_path = 'data/data.csv'
@@ -159,11 +212,19 @@ def main():
                        enforce_invertibility=False)
         
         print("  Step 2: Fitting model (max 100 iterations)...")
+        print("  This may take several minutes. Please wait...")
+        
+        # Start progress indicator
+        progress = ProgressIndicator("Fitting SARIMA model", interval=10)
+        progress.start()
+        
         try:
             fitted_model = model.fit(disp=False, maxiter=100)
+            progress.stop()
             print(f"  Step 3: Model fitted successfully! (AIC: {fitted_model.aic:.2f})")
             best_model = fitted_model
         except Exception as e:
+            progress.stop()
             print(f"  Error fitting model: {e}")
             print("  Step 4: Trying simpler parameters...")
             # Try simpler model
@@ -173,11 +234,23 @@ def main():
                            enforce_stationarity=False,
                            enforce_invertibility=False)
             print("  Step 5: Fitting with simpler parameters...")
-            fitted_model = model.fit(disp=False, maxiter=100)
-            print(f"  Step 6: Model fitted successfully! (AIC: {fitted_model.aic:.2f})")
-            best_model = fitted_model
-            seasonal_period = 30
-            print(f"  Using monthly seasonality (s=30) instead")
+            print("  This may take several minutes. Please wait...")
+            
+            # Start progress indicator for retry
+            progress = ProgressIndicator("Fitting SARIMA model with simpler parameters", interval=10)
+            progress.start()
+            
+            try:
+                fitted_model = model.fit(disp=False, maxiter=100)
+                progress.stop()
+                print(f"  Step 6: Model fitted successfully! (AIC: {fitted_model.aic:.2f})")
+                best_model = fitted_model
+                seasonal_period = 30
+                print(f"  Using monthly seasonality (s=30) instead")
+            except Exception as e2:
+                progress.stop()
+                print(f"  Error with simpler parameters: {e2}")
+                raise
     
     # Model summary
     print(f"\n{'=' * 60}")
@@ -302,9 +375,137 @@ def main():
     print(f"  - Residuals should be close to zero mean and constant variance")
     print(f"  ✓ Residual diagnostics completed")
     
+    # Record end time
+    end_time = time.time()
+    end_datetime = datetime.now()
+    duration = end_time - start_time
+    
     print(f"\n{'=' * 60}")
     print("Training and evaluation completed successfully!")
+    print(f"{'=' * 60}")
+    print(f"Start time: {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"End time: {end_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Duration: {duration:.2f} seconds ({duration/60:.2f} minutes)")
     print(f"{'=' * 60}\n")
+    
+    # Save results to files
+    result_dir = 'result'
+    os.makedirs(result_dir, exist_ok=True)
+    
+    model_name = 'sarima'
+    print(f"\nSaving results to {result_dir}/ directory...")
+    
+    # Save metrics summary
+    metrics_file = os.path.join(result_dir, f'{model_name}_metrics.md')
+    with open(metrics_file, 'w') as f:
+        f.write("# SARIMA Model Results\n\n")
+        f.write(f"**Generated on:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        
+        f.write("## Model Architecture\n\n")
+        f.write(f"- **Target:** {target_col}\n")
+        f.write(f"- **Model type:** SARIMA({p},{d},{q})({P},{D},{Q}){seasonal_period}\n")
+        f.write(f"- **Seasonal period:** {seasonal_period} days\n\n")
+        
+        f.write("## Model Diagnostics\n\n")
+        f.write(f"- **AIC:** {best_model.aic:.2f}\n")
+        f.write(f"- **BIC:** {best_model.bic:.2f}\n")
+        f.write(f"- **Log Likelihood:** {best_model.llf:.2f}\n\n")
+        
+        f.write("## Training Set Performance\n\n")
+        f.write(f"- **Mean Squared Error (MSE):** {train_mse:.4f}\n")
+        f.write(f"- **Root Mean Squared Error (RMSE):** {train_rmse:.4f}\n")
+        f.write(f"- **Mean Absolute Error (MAE):** {train_mae:.4f}\n")
+        f.write(f"- **R² Score:** {train_r2:.4f}\n")
+        f.write(f"- **Accuracy (R² × 100):** {train_accuracy:.2f}%\n")
+        f.write(f"- **MAPE:** {train_mape:.2f}%\n\n")
+        
+        f.write("## Test Set Performance\n\n")
+        f.write(f"- **Mean Squared Error (MSE):** {test_mse:.4f}\n")
+        f.write(f"- **Root Mean Squared Error (RMSE):** {test_rmse:.4f}\n")
+        f.write(f"- **Mean Absolute Error (MAE):** {test_mae:.4f}\n")
+        f.write(f"- **R² Score:** {test_r2:.4f}\n")
+        f.write(f"- **Accuracy (R² × 100):** {test_accuracy:.2f}%\n")
+        f.write(f"- **MAPE:** {test_mape:.2f}%\n\n")
+        
+        f.write("## Prediction Accuracy (within tolerance)\n\n")
+        f.write(f"- **Training:** {train_acc_5:.2f}% within 5%, {train_acc_10:.2f}% within 10%\n")
+        f.write(f"- **Test:** {test_acc_5:.2f}% within 5%, {test_acc_10:.2f}% within 10%\n\n")
+        
+        f.write("## Residual Diagnostics\n\n")
+        f.write(f"- **Mean of residuals:** {np.mean(residuals):.6f}\n")
+        f.write(f"- **Std of residuals:** {np.std(residuals):.4f}\n\n")
+        
+        f.write("## Timing Information\n\n")
+        f.write(f"- **Start time:** {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"- **End time:** {end_datetime.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"- **Duration:** {duration:.2f} seconds ({duration/60:.2f} minutes)\n")
+    
+    # Save predictions vs actuals to CSV
+    predictions_file = os.path.join(result_dir, f'{model_name}_predictions.csv')
+    predictions_df = pd.DataFrame({
+        'date': test_data.index,
+        'actual': test_actual,
+        'predicted': test_pred_aligned,
+        'error': test_actual - test_pred_aligned,
+        'error_percent': ((test_actual - test_pred_aligned) / test_actual * 100)
+    })
+    predictions_df.to_csv(predictions_file, index=False)
+    
+    # Save metrics to JSON
+    metrics_json = {
+        'model_name': 'SARIMA',
+        'model_type': f'SARIMA({p},{d},{q})({P},{D},{Q}){seasonal_period}',
+        'target': target_col,
+        'seasonal_period': seasonal_period,
+        'parameters': {
+            'p': p, 'd': d, 'q': q,
+            'P': P, 'D': D, 'Q': Q
+        },
+        'diagnostics': {
+            'aic': float(best_model.aic),
+            'bic': float(best_model.bic),
+            'log_likelihood': float(best_model.llf)
+        },
+        'training_metrics': {
+            'mse': float(train_mse),
+            'rmse': float(train_rmse),
+            'mae': float(train_mae),
+            'r2': float(train_r2),
+            'accuracy': float(train_accuracy),
+            'mape': float(train_mape),
+            'accuracy_5pct': float(train_acc_5),
+            'accuracy_10pct': float(train_acc_10)
+        },
+        'test_metrics': {
+            'mse': float(test_mse),
+            'rmse': float(test_rmse),
+            'mae': float(test_mae),
+            'r2': float(test_r2),
+            'accuracy': float(test_accuracy),
+            'mape': float(test_mape),
+            'accuracy_5pct': float(test_acc_5),
+            'accuracy_10pct': float(test_acc_10)
+        },
+        'residuals': {
+            'mean': float(np.mean(residuals)),
+            'std': float(np.std(residuals))
+        },
+        'timing': {
+            'start_time': start_datetime.isoformat(),
+            'end_time': end_datetime.isoformat(),
+            'duration_seconds': float(duration),
+            'duration_minutes': float(duration / 60)
+        },
+        'generated_at': datetime.now().isoformat()
+    }
+    
+    json_file = os.path.join(result_dir, f'{model_name}_metrics.json')
+    with open(json_file, 'w') as f:
+        json.dump(metrics_json, f, indent=2)
+    
+    print(f"  ✓ Metrics saved to: {metrics_file}")
+    print(f"  ✓ Predictions saved to: {predictions_file}")
+    print(f"  ✓ JSON metrics saved to: {json_file}")
     
     return {
         'model': best_model,

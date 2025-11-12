@@ -33,24 +33,23 @@ class TimeSeriesDataset(Dataset):
             torch.FloatTensor([self.y[idx]])
         )
 
-class LSTMModel(nn.Module):
-    """LSTM model for time series prediction"""
+class GRUModel(nn.Module):
+    """GRU model for time series prediction"""
     def __init__(self, input_size, hidden_size=64, num_layers=2, output_size=1):
-        super(LSTMModel, self).__init__()
+        super(GRUModel, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=0.2)
+        self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True, dropout=0.2)
         self.fc = nn.Linear(hidden_size, output_size)
         self.dropout = nn.Dropout(0.2)
     
     def forward(self, x):
         # Initialize hidden state
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
         
-        # LSTM forward pass
-        out, _ = self.lstm(x, (h0, c0))
+        # GRU forward pass
+        out, _ = self.gru(x, h0)
         
         # Take the last output
         out = out[:, -1, :]
@@ -64,7 +63,7 @@ def main():
     start_datetime = datetime.now()
     
     print("=" * 60)
-    print("Water Level Prediction - LSTM Model")
+    print("Water Level Prediction - GRU Model")
     print("Predicting NON station using CSA, LUA, CKH, VIE stations")
     print("=" * 60)
     print(f"Start time: {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -90,6 +89,12 @@ def main():
         print(f"Error: Missing columns: {missing_cols}")
         return
     
+    # Extract dates if available
+    has_date = 'date_gmt' in df.columns
+    if has_date:
+        df['date_gmt'] = pd.to_datetime(df['date_gmt'], errors='coerce')
+        dates = df['date_gmt'].values
+    
     # Extract features and target
     X_data = df[feature_cols].values
     y_data = df[target_col].values
@@ -98,6 +103,8 @@ def main():
     valid_mask = ~(np.isnan(X_data).any(axis=1) | np.isnan(y_data))
     X_data = X_data[valid_mask]
     y_data = y_data[valid_mask]
+    if has_date:
+        dates = dates[valid_mask]
     
     print(f"\nAfter removing NaN values: {len(X_data)} samples")
     
@@ -115,9 +122,13 @@ def main():
     # Create sequences for features
     X_sequences = []
     y_targets = []
+    sequence_dates = []  # Store dates for each prediction
+    
     for i in range(len(X_scaled) - sequence_length):
         X_sequences.append(X_scaled[i:i+sequence_length])
         y_targets.append(y_scaled[i+sequence_length])
+        if has_date:
+            sequence_dates.append(dates[i+sequence_length])
     
     X_sequences = np.array(X_sequences)
     y_targets = np.array(y_targets)
@@ -128,6 +139,9 @@ def main():
     split_idx = int(len(X_sequences) * 0.8)
     X_train, X_test = X_sequences[:split_idx], X_sequences[split_idx:]
     y_train, y_test = y_targets[:split_idx], y_targets[split_idx:]
+    if has_date:
+        train_dates = sequence_dates[:split_idx]
+        test_dates = sequence_dates[split_idx:]
     
     print(f"\nTrain set: {len(X_train)} samples")
     print(f"Test set: {len(X_test)} samples")
@@ -142,7 +156,7 @@ def main():
     
     # Initialize model
     input_size = len(feature_cols)
-    model = LSTMModel(input_size=input_size, hidden_size=64, num_layers=2, output_size=1)
+    model = GRUModel(input_size=input_size, hidden_size=64, num_layers=2, output_size=1)
     
     # Loss and optimizer
     criterion = nn.MSELoss()
@@ -152,7 +166,7 @@ def main():
     # Training
     num_epochs = 50
     print(f"\n{'=' * 60}")
-    print("Training LSTM Model...")
+    print("Training GRU Model...")
     print(f"{'=' * 60}")
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -227,7 +241,7 @@ def main():
     print(f"  - Target: {target_col}")
     print(f"  - Sequence length: {sequence_length}")
     print(f"  - Hidden size: 64")
-    print(f"  - Number of LSTM layers: 2")
+    print(f"  - Number of GRU layers: 2")
     print(f"  - Training epochs: {num_epochs}")
     
     print(f"\nPerformance Metrics:")
@@ -235,13 +249,23 @@ def main():
     print(f"  - Root Mean Squared Error (RMSE): {rmse:.4f}")
     print(f"  - Mean Absolute Error (MAE): {mae:.4f}")
     print(f"  - R² Score: {r2:.4f}")
+    print(f"  - Accuracy (R² × 100): {accuracy:.2f}%")
+    print(f"  - MAPE: {mape:.2f}%")
     
     print(f"\nSample Predictions (First 10 test samples):")
-    print(f"{'Index':<8} {'Actual':<12} {'Predicted':<12} {'Error':<12}")
-    print("-" * 48)
-    for i in range(min(10, len(predictions_original))):
-        error = abs(actuals_original[i] - predictions_original[i])
-        print(f"{i:<8} {actuals_original[i]:<12.4f} {predictions_original[i]:<12.4f} {error:<12.4f}")
+    if has_date:
+        print(f"{'Date':<12} {'Actual':<12} {'Predicted':<12} {'Error':<12}")
+        print("-" * 52)
+        for i in range(min(10, len(predictions_original))):
+            error = abs(actuals_original[i] - predictions_original[i])
+            date_str = pd.to_datetime(test_dates[i]).strftime('%Y-%m-%d') if has_date else str(i)
+            print(f"{date_str:<12} {actuals_original[i]:<12.4f} {predictions_original[i]:<12.4f} {error:<12.4f}")
+    else:
+        print(f"{'Index':<8} {'Actual':<12} {'Predicted':<12} {'Error':<12}")
+        print("-" * 48)
+        for i in range(min(10, len(predictions_original))):
+            error = abs(actuals_original[i] - predictions_original[i])
+            print(f"{i:<8} {actuals_original[i]:<12.4f} {predictions_original[i]:<12.4f} {error:<12.4f}")
     
     # Record end time
     end_time = time.time()
@@ -260,13 +284,13 @@ def main():
     result_dir = 'result'
     os.makedirs(result_dir, exist_ok=True)
     
-    model_name = 'lstm'
+    model_name = 'gru'
     print(f"\nSaving results to {result_dir}/ directory...")
     
     # Save metrics summary
     metrics_file = os.path.join(result_dir, f'{model_name}_metrics.md')
     with open(metrics_file, 'w') as f:
-        f.write("# LSTM Model Results\n\n")
+        f.write("# GRU Model Results\n\n")
         f.write(f"**Generated on:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         
         f.write("## Model Architecture\n\n")
@@ -274,7 +298,7 @@ def main():
         f.write(f"- **Target:** {target_col}\n")
         f.write(f"- **Sequence length:** {sequence_length}\n")
         f.write(f"- **Hidden size:** 64\n")
-        f.write(f"- **Number of LSTM layers:** 2\n")
+        f.write(f"- **Number of GRU layers:** 2\n")
         f.write(f"- **Training epochs:** {num_epochs}\n\n")
         
         f.write("## Performance Metrics\n\n")
@@ -292,19 +316,28 @@ def main():
     
     # Save predictions vs actuals to CSV
     predictions_file = os.path.join(result_dir, f'{model_name}_predictions.csv')
-    predictions_df = pd.DataFrame({
-        'index': range(len(predictions_original)),
-        'actual': actuals_original,
-        'predicted': predictions_original,
-        'error': actuals_original - predictions_original,
-        'error_percent': ((actuals_original - predictions_original) / actuals_original * 100)
-    })
+    if has_date:
+        predictions_df = pd.DataFrame({
+            'date': test_dates,
+            'actual': actuals_original,
+            'predicted': predictions_original,
+            'error': actuals_original - predictions_original,
+            'error_percent': ((actuals_original - predictions_original) / actuals_original * 100)
+        })
+    else:
+        predictions_df = pd.DataFrame({
+            'index': range(len(predictions_original)),
+            'actual': actuals_original,
+            'predicted': predictions_original,
+            'error': actuals_original - predictions_original,
+            'error_percent': ((actuals_original - predictions_original) / actuals_original * 100)
+        })
     predictions_df.to_csv(predictions_file, index=False)
     
     # Save metrics to JSON
     metrics_json = {
-        'model_name': 'LSTM',
-        'model_type': 'Long Short-Term Memory',
+        'model_name': 'GRU',
+        'model_type': 'Gated Recurrent Unit',
         'target': target_col,
         'features': feature_cols,
         'parameters': {
@@ -350,4 +383,3 @@ def main():
 
 if __name__ == "__main__":
     results = main()
-

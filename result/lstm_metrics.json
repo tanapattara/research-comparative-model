@@ -1,0 +1,33 @@
+{
+  "model_name": "LSTM",
+  "model_type": "Long Short-Term Memory",
+  "target": "NON",
+  "features": [
+    "CSA",
+    "LUA",
+    "CKH",
+    "VIE"
+  ],
+  "parameters": {
+    "sequence_length": 60,
+    "hidden_size": 64,
+    "num_layers": 2,
+    "epochs": 50,
+    "batch_size": 32
+  },
+  "metrics": {
+    "mse": 0.6103814244270325,
+    "rmse": 0.7812691113995436,
+    "mae": 0.3577345907688141,
+    "r2": 0.9586926698684692,
+    "accuracy": 95.86926698684692,
+    "mape": Infinity
+  },
+  "timing": {
+    "start_time": "2025-11-12T16:00:11.939751",
+    "end_time": "2025-11-12T16:02:25.085484",
+    "duration_seconds": 133.14573287963867,
+    "duration_minutes": 2.219095547993978
+  },
+  "generated_at": "2025-11-12T16:02:25.090268"
+}

@@ -1,0 +1,44 @@
+{
+  "model_name": "Support Vector Machine",
+  "model_type": "Support Vector Regression (SVR)",
+  "target": "NON",
+  "features": [
+    "CSA",
+    "LUA",
+    "CKH",
+    "VIE"
+  ],
+  "parameters": {
+    "kernel": "rbf",
+    "C": 100.0,
+    "epsilon": 0.1,
+    "gamma": "scale"
+  },
+  "training_metrics": {
+    "mse": 0.0752953116340903,
+    "rmse": 0.27439991186968393,
+    "mae": 0.17570737089967442,
+    "r2": 0.9915947313859511,
+    "accuracy": 99.15947313859512,
+    "mape": Infinity,
+    "accuracy_5pct": 57.30593607305936,
+    "accuracy_10pct": 80.09893455098934
+  },
+  "test_metrics": {
+    "mse": 0.06192432224507553,
+    "rmse": 0.2488459809703093,
+    "mae": 0.17921856827019028,
+    "r2": 0.9927069684429333,
+    "accuracy": 99.27069684429333,
+    "mape": Infinity,
+    "accuracy_5pct": 54.718417047184175,
+    "accuracy_10pct": 79.68036529680366
+  },
+  "timing": {
+    "start_time": "2025-11-12T16:02:25.346655",
+    "end_time": "2025-11-12T16:02:26.275297",
+    "duration_seconds": 0.9286420345306396,
+    "duration_minutes": 0.015477367242177327
+  },
+  "generated_at": "2025-11-12T16:02:26.279076"
+}

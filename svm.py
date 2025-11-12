@@ -6,16 +6,24 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
+import json
+import time
+from datetime import datetime
 warnings.filterwarnings('ignore')
 
 # Set random seed for reproducibility
 np.random.seed(42)
 
 def main():
+    # Record start time
+    start_time = time.time()
+    start_datetime = datetime.now()
+    
     print("=" * 60)
     print("Water Level Prediction - Support Vector Machine (SVM) Model")
     print("Predicting NON station using CSA, LUA, CKH, VIE stations")
     print("=" * 60)
+    print(f"Start time: {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Load data
     data_path = 'data/data.csv'
@@ -182,9 +190,125 @@ def main():
         error_pct = (error / y_test[i]) * 100 if y_test[i] != 0 else 0
         print(f"{i:<8} {y_test[i]:<12.4f} {y_test_pred[i]:<12.4f} {error:<12.4f} {error_pct:<12.2f}%")
     
+    # Record end time
+    end_time = time.time()
+    end_datetime = datetime.now()
+    duration = end_time - start_time
+    
     print(f"\n{'=' * 60}")
     print("Training and evaluation completed successfully!")
+    print(f"{'=' * 60}")
+    print(f"Start time: {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"End time: {end_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Duration: {duration:.2f} seconds ({duration/60:.2f} minutes)")
     print(f"{'=' * 60}\n")
+    
+    # Save results to files
+    result_dir = 'result'
+    os.makedirs(result_dir, exist_ok=True)
+    
+    model_name = 'svm'
+    print(f"\nSaving results to {result_dir}/ directory...")
+    
+    # Save metrics summary
+    metrics_file = os.path.join(result_dir, f'{model_name}_metrics.md')
+    with open(metrics_file, 'w') as f:
+        f.write("# Support Vector Machine (SVM) Model Results\n\n")
+        f.write(f"**Generated on:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        
+        f.write("## Model Architecture\n\n")
+        f.write(f"- **Input features:** {', '.join(feature_cols)}\n")
+        f.write(f"- **Target:** {target_col}\n")
+        f.write(f"- **Model type:** Support Vector Regression (SVR)\n")
+        f.write(f"- **Kernel type:** {kernel.upper()}\n")
+        f.write(f"- **C (Regularization):** {C}\n")
+        f.write(f"- **Epsilon:** {epsilon}\n")
+        f.write(f"- **Gamma:** {gamma}\n\n")
+        
+        f.write("## Training Set Performance\n\n")
+        f.write(f"- **Mean Squared Error (MSE):** {train_mse:.4f}\n")
+        f.write(f"- **Root Mean Squared Error (RMSE):** {train_rmse:.4f}\n")
+        f.write(f"- **Mean Absolute Error (MAE):** {train_mae:.4f}\n")
+        f.write(f"- **R² Score:** {train_r2:.4f}\n")
+        f.write(f"- **Accuracy (R² × 100):** {train_accuracy:.2f}%\n")
+        f.write(f"- **MAPE:** {train_mape:.2f}%\n\n")
+        
+        f.write("## Test Set Performance\n\n")
+        f.write(f"- **Mean Squared Error (MSE):** {test_mse:.4f}\n")
+        f.write(f"- **Root Mean Squared Error (RMSE):** {test_rmse:.4f}\n")
+        f.write(f"- **Mean Absolute Error (MAE):** {test_mae:.4f}\n")
+        f.write(f"- **R² Score:** {test_r2:.4f}\n")
+        f.write(f"- **Accuracy (R² × 100):** {test_accuracy:.2f}%\n")
+        f.write(f"- **MAPE:** {test_mape:.2f}%\n\n")
+        
+        f.write("## Prediction Accuracy (within tolerance)\n\n")
+        f.write(f"- **Training:** {train_acc_5:.2f}% within 5%, {train_acc_10:.2f}% within 10%\n")
+        f.write(f"- **Test:** {test_acc_5:.2f}% within 5%, {test_acc_10:.2f}% within 10%\n\n")
+        
+        f.write("## Timing Information\n\n")
+        f.write(f"- **Start time:** {start_datetime.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"- **End time:** {end_datetime.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"- **Duration:** {duration:.2f} seconds ({duration/60:.2f} minutes)\n")
+    
+    # Save predictions vs actuals to CSV
+    predictions_file = os.path.join(result_dir, f'{model_name}_predictions.csv')
+    predictions_df = pd.DataFrame({
+        'index': range(len(y_test)),
+        'actual': y_test,
+        'predicted': y_test_pred,
+        'error': y_test - y_test_pred,
+        'error_percent': ((y_test - y_test_pred) / y_test * 100)
+    })
+    predictions_df.to_csv(predictions_file, index=False)
+    
+    # Save metrics to JSON
+    metrics_json = {
+        'model_name': 'Support Vector Machine',
+        'model_type': 'Support Vector Regression (SVR)',
+        'target': target_col,
+        'features': feature_cols,
+        'parameters': {
+            'kernel': kernel,
+            'C': C,
+            'epsilon': epsilon,
+            'gamma': gamma
+        },
+        'training_metrics': {
+            'mse': float(train_mse),
+            'rmse': float(train_rmse),
+            'mae': float(train_mae),
+            'r2': float(train_r2),
+            'accuracy': float(train_accuracy),
+            'mape': float(train_mape),
+            'accuracy_5pct': float(train_acc_5),
+            'accuracy_10pct': float(train_acc_10)
+        },
+        'test_metrics': {
+            'mse': float(test_mse),
+            'rmse': float(test_rmse),
+            'mae': float(test_mae),
+            'r2': float(test_r2),
+            'accuracy': float(test_accuracy),
+            'mape': float(test_mape),
+            'accuracy_5pct': float(test_acc_5),
+            'accuracy_10pct': float(test_acc_10)
+        },
+        'timing': {
+            'start_time': start_datetime.isoformat(),
+            'end_time': end_datetime.isoformat(),
+            'duration_seconds': float(duration),
+            'duration_minutes': float(duration / 60)
+        },
+        'generated_at': datetime.now().isoformat()
+    }
+    
+    json_file = os.path.join(result_dir, f'{model_name}_metrics.json')
+    with open(json_file, 'w') as f:
+        json.dump(metrics_json, f, indent=2)
+    
+    print(f"  ✓ Metrics saved to: {metrics_file}")
+    print(f"  ✓ Predictions saved to: {predictions_file}")
+    print(f"  ✓ JSON metrics saved to: {json_file}")
     
     return {
         'train_mse': train_mse,
