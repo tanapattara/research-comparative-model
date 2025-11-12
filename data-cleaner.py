@@ -120,6 +120,81 @@ def main():
     print(f"\n{'=' * 60}")
     print("All files processed successfully!")
     print(f"{'=' * 60}")
+
+def merge_all_data(data_folder='data', output_file='data.csv'):
+    """Merge all station CSV files into one table with columns: date_gmt, CSA, LUA, CKH, VIE, NON"""
+    print(f"\n{'=' * 60}")
+    print("Merging all station data into one table")
+    print(f"{'=' * 60}")
+    
+    # Define the station files and their column names
+    station_files = {
+        'CSA.csv': 'CSA',
+        'LUA.csv': 'LUA',
+        'CKH.csv': 'CKH',
+        'VIE.csv': 'VIE',
+        'NON.csv': 'NON'
+    }
+    
+    # Start with the first file to get the base structure
+    merged_df = None
+    
+    for filename, station_name in station_files.items():
+        file_path = os.path.join(data_folder, filename)
+        
+        if not os.path.exists(file_path):
+            print(f"Warning: {filename} not found, skipping...")
+            continue
+        
+        print(f"\nLoading {filename}...")
+        df = pd.read_csv(file_path)
+        
+        # Convert date_gmt to datetime
+        df['date_gmt'] = pd.to_datetime(df['date_gmt'], errors='coerce')
+        
+        # Rename AVG column to station name
+        df = df.rename(columns={'AVG': station_name})
+        
+        # Select only date_gmt and station column
+        df = df[['date_gmt', station_name]].copy()
+        
+        # Merge with existing dataframe
+        if merged_df is None:
+            merged_df = df
+        else:
+            merged_df = pd.merge(merged_df, df, on='date_gmt', how='outer')
+        
+        print(f"  Shape: {df.shape}, Date range: {df['date_gmt'].min()} to {df['date_gmt'].max()}")
+    
+    if merged_df is None:
+        print("No data files found to merge!")
+        return
+    
+    # Sort by date_gmt
+    merged_df = merged_df.sort_values('date_gmt').reset_index(drop=True)
+    
+    # Ensure column order: date_gmt, CSA, LUA, CKH, VIE, NON
+    column_order = ['date_gmt', 'CSA', 'LUA', 'CKH', 'VIE', 'NON']
+    # Only include columns that exist
+    column_order = [col for col in column_order if col in merged_df.columns]
+    merged_df = merged_df[column_order]
+    
+    # Save to data.csv
+    output_path = os.path.join(data_folder, output_file)
+    merged_df.to_csv(output_path, index=False)
+    
+    print(f"\n{'=' * 60}")
+    print(f"Merged data saved to {output_path}")
+    print(f"Final shape: {merged_df.shape}")
+    print(f"Columns: {list(merged_df.columns)}")
+    print(f"Date range: {merged_df['date_gmt'].min()} to {merged_df['date_gmt'].max()}")
+    print(f"\nFirst few rows:")
+    print(merged_df.head(10))
+    print(f"\nLast few rows:")
+    print(merged_df.tail(10))
+    print(f"{'=' * 60}")
     
 if __name__ == "__main__":
     main()
+    # After processing all files, merge them into one table
+    merge_all_data()
