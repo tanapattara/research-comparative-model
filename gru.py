@@ -71,9 +71,12 @@ def create_test_graph(predictions_df, model_name, result_dir, target_col):
         # Convert date to datetime
         predictions_df['date'] = pd.to_datetime(predictions_df['date'], errors='coerce')
         
-        # Remove rows where actual or predicted is null
+        # Filter for 2025 data, months 1-11 (January to November)
         test_data = predictions_df.copy()
         test_data = test_data[
+            (test_data['date'].dt.year == 2025) & 
+            (test_data['date'].dt.month >= 1) & 
+            (test_data['date'].dt.month <= 11) &
             (test_data['actual'].notna()) & 
             (test_data['predicted'].notna())
         ]
@@ -121,14 +124,22 @@ def create_prediction_graph(predictions_df, model_name, result_dir, target_col):
         # Convert date to datetime
         predictions_df['date'] = pd.to_datetime(predictions_df['date'], errors='coerce')
         
-        # Filter for 2025 data, or use most recent year if 2025 doesn't exist
-        year_2025_data = predictions_df[predictions_df['date'].dt.year == 2025]
+        # Filter for 2025 data, months 1-10 (January to October)
+        year_2025_data = predictions_df[
+            (predictions_df['date'].dt.year == 2025) & 
+            (predictions_df['date'].dt.month >= 1) & 
+            (predictions_df['date'].dt.month < 11)
+        ]
         
         if len(year_2025_data) == 0:
-            # Use most recent year available
+            # Use most recent year available, months 1-10
             most_recent_year = predictions_df['date'].dt.year.max()
-            year_2025_data = predictions_df[predictions_df['date'].dt.year == most_recent_year]
-            print(f"  ℹ No 2025 data found. Using {most_recent_year} data instead.")
+            year_2025_data = predictions_df[
+                (predictions_df['date'].dt.year == most_recent_year) &
+                (predictions_df['date'].dt.month >= 1) & 
+                (predictions_df['date'].dt.month < 11)
+            ]
+            print(f"  ℹ No 2025 data (months 1-10) found. Using {most_recent_year} data (months 1-10) instead.")
         
         # Remove rows where actual or predicted is 0 or null
         year_2025_data = year_2025_data.copy()
@@ -256,14 +267,14 @@ def main():
     
     print(f"Sequences shape: X={X_sequences.shape}, y={y_targets.shape}")
     
-    # Split into train and test sets based on year 2025
+    # Split into train and test sets based on year 2025, months 1-11
     # Training: all sequences with target date before 2025
-    # Testing: all sequences with target date in 2025
+    # Testing: all sequences with target date in 2025, months 1-11 (January to November)
     if has_date:
         # Convert sequence_dates to pandas Series for easier filtering
         sequence_dates_series = pd.Series(sequence_dates)
-        # Find sequences where target date is in 2025
-        is_2025 = sequence_dates_series.dt.year == 2025
+        # Find sequences where target date is in 2025, months 1-11 (January to November)
+        is_2025 = (sequence_dates_series.dt.year == 2025) & (sequence_dates_series.dt.month >= 1) & (sequence_dates_series.dt.month <= 11)
         is_2025_array = is_2025.values
         
         train_mask = ~is_2025_array
@@ -278,7 +289,7 @@ def main():
         
         print(f"\nSplitting by year:")
         print(f"  Training: All data before 2025")
-        print(f"  Testing: Only 2025 data")
+        print(f"  Testing: Only 2025 data (months 1-11, January to November)")
         print(f"  Train set: {len(X_train)} samples")
         print(f"  Test set: {len(X_test)} samples")
         if len(X_test) == 0:

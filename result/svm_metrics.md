@@ -1,6 +1,6 @@
 # Support Vector Machine (SVM) Model Results
 
-**Generated on:** 2025-11-12 22:22:35
+**Generated on:** 2025-11-13 12:08:36
 
 ## Model Architecture
 
@@ -17,26 +17,26 @@
 - **Mean Squared Error (MSE):** 0.0465
 - **Root Mean Squared Error (RMSE):** 0.2157
 - **Mean Absolute Error (MAE):** 0.1580
-- **RÂ² Score:** 0.9937
-- **Accuracy (RÂ² Ã— 100):** 99.37%
+- **R² Score:** 0.9937
+- **Accuracy (R² × 100):** 99.37%
 - **MAPE:** 5.70%
 
 ## Test Set Performance
 
 - **Mean Squared Error (MSE):** 0.0441
-- **Root Mean Squared Error (RMSE):** 0.2100
-- **Mean Absolute Error (MAE):** 0.1778
-- **RÂ² Score:** 0.9943
-- **Accuracy (RÂ² Ã— 100):** 99.43%
+- **Root Mean Squared Error (RMSE):** 0.2099
+- **Mean Absolute Error (MAE):** 0.1777
+- **R² Score:** 0.9943
+- **Accuracy (R² × 100):** 99.43%
 - **MAPE:** 4.84%
 
 ## Prediction Accuracy (within tolerance)
 
-- **Training:** 60.23% within 5%, 83.57% within 10%
+- **Training:** 60.22% within 5%, 83.50% within 10%
 - **Test:** 69.21% within 5%, 89.52% within 10%
 
 ## Timing Information
 
-- **Start time:** 2025-11-12 22:22:33
-- **End time:** 2025-11-12 22:22:35
-- **Duration:** 1.41 seconds (0.02 minutes)
+- **Start time:** 2025-11-13 12:08:32
+- **End time:** 2025-11-13 12:08:36
+- **Duration:** 3.38 seconds (0.06 minutes)
