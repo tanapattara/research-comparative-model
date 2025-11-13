@@ -1,6 +1,6 @@
 # Support Vector Machine (SVM) Model Results
 
-**Generated on:** 2025-11-12 22:06:06
+**Generated on:** 2025-11-12 22:22:35
 
 ## Model Architecture
 
@@ -14,29 +14,29 @@
 
 ## Training Set Performance
 
-- **Mean Squared Error (MSE):** 0.0454
-- **Root Mean Squared Error (RMSE):** 0.2130
-- **Mean Absolute Error (MAE):** 0.1586
-- **R² Score:** 0.9939
-- **Accuracy (R² × 100):** 99.39%
-- **MAPE:** 5.67%
+- **Mean Squared Error (MSE):** 0.0465
+- **Root Mean Squared Error (RMSE):** 0.2157
+- **Mean Absolute Error (MAE):** 0.1580
+- **R² Score:** 0.9937
+- **Accuracy (R² × 100):** 99.37%
+- **MAPE:** 5.70%
 
 ## Test Set Performance
 
-- **Mean Squared Error (MSE):** 0.0608
-- **Root Mean Squared Error (RMSE):** 0.2465
-- **Mean Absolute Error (MAE):** 0.1674
-- **R² Score:** 0.9917
-- **Accuracy (R² × 100):** 99.17%
-- **MAPE:** 5.95%
+- **Mean Squared Error (MSE):** 0.0441
+- **Root Mean Squared Error (RMSE):** 0.2100
+- **Mean Absolute Error (MAE):** 0.1778
+- **R² Score:** 0.9943
+- **Accuracy (R² × 100):** 99.43%
+- **MAPE:** 4.84%
 
 ## Prediction Accuracy (within tolerance)
 
-- **Training:** 61.04% within 5%, 83.52% within 10%
-- **Test:** 59.37% within 5%, 82.54% within 10%
+- **Training:** 60.23% within 5%, 83.57% within 10%
+- **Test:** 69.21% within 5%, 89.52% within 10%
 
 ## Timing Information
 
-- **Start time:** 2025-11-12 22:06:04
-- **End time:** 2025-11-12 22:06:06
-- **Duration:** 1.23 seconds (0.02 minutes)
+- **Start time:** 2025-11-12 22:22:33
+- **End time:** 2025-11-12 22:22:35
+- **Duration:** 1.41 seconds (0.02 minutes)

@@ -276,9 +276,11 @@ def main():
     
     # Determine seasonal period (assuming daily data, try yearly seasonality)
     # For daily data, common seasonalities: 7 (weekly), 30 (monthly), 365 (yearly)
-    # Use 365 for yearly seasonality, but this can be adjusted
+    # Note: seasonal_period=365 can be slow. The code will automatically fall back to
+    # seasonal_period=30 (monthly) if fitting fails or takes too long.
     seasonal_period = 365
     print(f"\nSeasonal period: {seasonal_period} (yearly seasonality for daily data)")
+    print(f"  Note: If fitting is too slow, the model will automatically try monthly seasonality (s=30)")
     
     # Split into train and test sets based on year 2025
     # Training: all data before 2025
@@ -341,7 +343,7 @@ def main():
                        enforce_stationarity=False,
                        enforce_invertibility=False)
         
-        print("  Step 2: Fitting model (max 100 iterations)...")
+        print("  Step 2: Fitting model (optimized settings)...")
         print("  This may take several minutes. Please wait...")
         
         # Start progress indicator
@@ -349,7 +351,16 @@ def main():
         progress.start()
         
         try:
-            fitted_model = model.fit(disp=False, maxiter=100)
+            # Use faster optimization method with convergence tolerance
+            # method='lbfgs' is faster than default for large datasets
+            # tol: convergence tolerance (stop early if converged)
+            # maxiter: maximum iterations (reduced from 100 to 50 for faster convergence)
+            fitted_model = model.fit(
+                disp=False, 
+                maxiter=50,
+                method='lbfgs',  # L-BFGS-B is faster for large problems
+                tol=1e-6  # Convergence tolerance (stops early when converged)
+            )
             progress.stop()
             print(f"  Step 3: Model fitted successfully! (AIC: {fitted_model.aic:.2f})")
             best_model = fitted_model
@@ -371,7 +382,13 @@ def main():
             progress.start()
             
             try:
-                fitted_model = model.fit(disp=False, maxiter=100)
+                # Use faster optimization method with convergence tolerance
+                fitted_model = model.fit(
+                    disp=False, 
+                    maxiter=50,
+                    method='lbfgs',  # L-BFGS-B is faster for large problems
+                    tol=1e-6  # Convergence tolerance (stops early when converged)
+                )
                 progress.stop()
                 print(f"  Step 6: Model fitted successfully! (AIC: {fitted_model.aic:.2f})")
                 best_model = fitted_model
