@@ -125,22 +125,22 @@ def main():
         print(f"\n❌ SVM model failed: {str(e)}")
         all_results['SVM'] = None
     
-    # Run SARIMA Model
-    print("\n" + "=" * 80)
-    print("5. Running SARIMA Model...")
-    print("=" * 80)
-    try:
-        sarima_results = sarima_main()
-        all_results['SARIMA'] = sarima_results
-        print("\n✓ SARIMA model completed successfully")
-    except Exception as e:
-        print(f"\n❌ SARIMA model failed: {str(e)}")
-        all_results['SARIMA'] = None
+    # # Run SARIMA Model
+    # print("\n" + "=" * 80)
+    # print("5. Running SARIMA Model...")
+    # print("=" * 80)
+    # try:
+    #     sarima_results = sarima_main()
+    #     all_results['SARIMA'] = sarima_results
+    #     print("\n✓ SARIMA model completed successfully")
+    # except Exception as e:
+    #     print(f"\n❌ SARIMA model failed: {str(e)}")
+    #     all_results['SARIMA'] = None
     
-    # Print summary of all results
-    print("\n" + "=" * 80)
-    print("COMPARATIVE RESULTS SUMMARY")
-    print("=" * 80)
+    # # Print summary of all results
+    # print("\n" + "=" * 80)
+    # print("COMPARATIVE RESULTS SUMMARY")
+    # print("=" * 80)
     
     # Print individual model results
     for model_name, results in all_results.items():

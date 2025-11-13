@@ -1,6 +1,6 @@
 # GRU Model Results
 
-**Generated on:** 2025-11-13 12:08:30
+**Generated on:** 2025-11-13 17:13:53
 
 ## Model Architecture
 
@@ -22,6 +22,6 @@
 
 ## Timing Information
 
-- **Start time:** 2025-11-13 12:00:32
-- **End time:** 2025-11-13 12:08:30
-- **Duration:** 478.12 seconds (7.97 minutes)
+- **Start time:** 2025-11-13 17:05:47
+- **End time:** 2025-11-13 17:13:53
+- **Duration:** 486.00 seconds (8.10 minutes)
