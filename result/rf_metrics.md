@@ -1,6 +1,6 @@
 # Random Forest Model Results
 
-**Generated on:** 2025-11-13 17:13:54
+**Generated on:** 2025-11-14 20:42:16
 
 ## Model Architecture
 
@@ -14,9 +14,9 @@
 
 ## Feature Importance
 
-- **VIE:** 0.8641 (86.41%)
-- **CKH:** 0.1238 (12.38%)
-- **LUA:** 0.0089 (0.89%)
+- **VIE:** 0.8654 (86.54%)
+- **CKH:** 0.1224 (12.24%)
+- **LUA:** 0.0090 (0.90%)
 - **CSA:** 0.0032 (0.32%)
 
 ## Training Set Performance
@@ -30,15 +30,15 @@
 
 ## Test Set Performance
 
-- **Mean Squared Error (MSE):** 0.0542
-- **Root Mean Squared Error (RMSE):** 0.2329
-- **Mean Absolute Error (MAE):** 0.1855
-- **R² Score:** 0.9930
-- **Accuracy (R² × 100):** 99.30%
-- **MAPE:** 5.36%
+- **Mean Squared Error (MSE):** 0.0451
+- **Root Mean Squared Error (RMSE):** 0.2123
+- **Mean Absolute Error (MAE):** 0.1723
+- **R² Score:** 0.9944
+- **Accuracy (R² × 100):** 99.44%
+- **MAPE:** 5.15%
 
 ## Timing Information
 
-- **Start time:** 2025-11-13 17:13:54
-- **End time:** 2025-11-13 17:13:54
-- **Duration:** 0.40 seconds (0.01 minutes)
+- **Start time:** 2025-11-14 20:42:15
+- **End time:** 2025-11-14 20:42:16
+- **Duration:** 0.42 seconds (0.01 minutes)

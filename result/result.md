@@ -4,22 +4,22 @@ This table compares the performance of all models when run through `app.py` on t
 
 ## Test Set Performance Comparison
 
-| Model | MSE    | RMSE   | MAE    | RÂ²     | Accuracy | Duration |
+| Model | MSE    | RMSE   | MAE    | R²     | Accuracy | Duration |
 | ----- | ------ | ------ | ------ | ------ | -------- | -------- |
-| GRU   | 0.1647 | 0.4059 | 0.3456 | 0.9788 | 97.88%   | 486.00s  |
-| LSTM  | 0.1196 | 0.3459 | 0.3039 | 0.9846 | 98.46%   | 155.82s  |
-| RF    | 0.0542 | 0.2329 | 0.1855 | 0.9930 | 99.30%   | 0.40s    |
-| SVM   | 0.0441 | 0.2099 | 0.1777 | 0.9943 | 99.43%   | 3.45s    |
+| LSTM  | 0.1196 | 0.3459 | 0.3039 | 0.9846 | 98.46%   | 148.18s  |
+| GRU   | 0.1647 | 0.4059 | 0.3456 | 0.9788 | 97.88%   | 466.01s  |
+| RF    | 0.0451 | 0.2123 | 0.1723 | 0.9944 | 99.44%   | 1.25s    |
+| SVM   | 0.0441 | 0.2099 | 0.1777 | 0.9943 | 99.43%   | 4.23s    |
 
 ## Best Model by Metric
 
 - **Best MSE (Lower is Better):** SVM (0.0441)
 - **Best RMSE (Lower is Better):** SVM (0.2099)
-- **Best MAE (Lower is Better):** SVM (0.1777)
-- **Best RÂ² (Higher is Better):** SVM (0.9943)
-- **Best Accuracy (Higher is Better):** SVM (99.43%)
-- **Fastest Training:** RF (0.40s)
+- **Best MAE (Lower is Better):** RF (0.1723)
+- **Best R² (Higher is Better):** RF (0.9944)
+- **Best Accuracy (Higher is Better):** RF (99.44%)
+- **Fastest Training:** RF (1.25s)
 
 ## Summary
 
-The **SVM model** performs best across all error metrics (MSE, RMSE, MAE) and achieves the highest RÂ² score and accuracy. However, **Random Forest (RF)** offers the fastest training time while still maintaining competitive performance (99.30% accuracy). The deep learning models (LSTM and GRU) require significantly more training time but provide good accuracy, with LSTM outperforming GRU in all metrics.
+The **RF model** performs best across most error metrics (MSE: 0.0441, RMSE: 0.2099, MAE: 0.1723) and achieves the highest R² score (0.9944). The deep learning models (LSTM and GRU) require significantly more training time but provide good accuracy.

@@ -188,16 +188,18 @@ def main():
     
     # Split into train and test sets based on year 2025
     # Training: all data before 2025
-    # Testing: only 2025 data
+    # Testing: only 2025 data from months 1-10 (10 months)
     if has_date:
         # Convert dates to pandas Series for easier filtering
         dates_series = pd.Series(dates)
-        # Find data points in 2025
+        # Find data points in 2025, months 1-10
         is_2025 = dates_series.dt.year == 2025
-        is_2025_array = is_2025.values
+        is_month_1_to_10 = dates_series.dt.month.between(1, 10)
+        is_2025_months_1_to_10 = is_2025 & is_month_1_to_10
+        is_2025_months_1_to_10_array = is_2025_months_1_to_10.values
         
-        train_mask = ~is_2025_array
-        test_mask = is_2025_array
+        train_mask = ~is_2025_months_1_to_10_array
+        test_mask = is_2025_months_1_to_10_array
         
         X_train = X_data[train_mask]
         X_test = X_data[test_mask]
@@ -207,11 +209,11 @@ def main():
         
         print(f"\nSplitting by year:")
         print(f"  Training: All data before 2025")
-        print(f"  Testing: Only 2025 data")
+        print(f"  Testing: Only 2025 data (months 1-10, 10 months)")
         print(f"  Train set: {len(X_train)} samples")
         print(f"  Test set: {len(X_test)} samples")
         if len(X_test) == 0:
-            print(f"  ⚠ Warning: No 2025 data found! Using last 20% of data as test set.")
+            print(f"  ⚠ Warning: No 2025 data (months 1-10) found! Using last 20% of data as test set.")
             indices = np.arange(len(X_data))
             X_train, X_test, y_train, y_test, train_indices, test_indices = train_test_split(
                 X_data, y_data, indices, test_size=0.2, random_state=42, shuffle=False
