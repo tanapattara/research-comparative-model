@@ -6,10 +6,10 @@ This table compares the performance of all models when run through `app.py` on t
 
 | Model | MSE    | RMSE   | MAE    | R²     | Accuracy | Duration |
 | ----- | ------ | ------ | ------ | ------ | -------- | -------- |
-| LSTM  | 0.1196 | 0.3459 | 0.3039 | 0.9846 | 98.46%   | 148.18s  |
-| GRU   | 0.1647 | 0.4059 | 0.3456 | 0.9788 | 97.88%   | 466.01s  |
-| RF    | 0.0451 | 0.2123 | 0.1723 | 0.9944 | 99.44%   | 1.25s    |
-| SVM   | 0.0441 | 0.2099 | 0.1777 | 0.9943 | 99.43%   | 4.23s    |
+| LSTM  | 0.1196 | 0.3459 | 0.3039 | 0.9846 | 98.46%   | 176.35s  |
+| GRU   | 0.1647 | 0.4059 | 0.3456 | 0.9788 | 97.88%   | 521.98s  |
+| RF    | 0.0451 | 0.2123 | 0.1723 | 0.9944 | 99.44%   | 1.60s    |
+| SVM   | 0.0441 | 0.2099 | 0.1777 | 0.9943 | 99.43%   | 4.67s    |
 
 ## Best Model by Metric
 
@@ -18,7 +18,7 @@ This table compares the performance of all models when run through `app.py` on t
 - **Best MAE (Lower is Better):** RF (0.1723)
 - **Best R² (Higher is Better):** RF (0.9944)
 - **Best Accuracy (Higher is Better):** RF (99.44%)
-- **Fastest Training:** RF (1.25s)
+- **Fastest Training:** RF (1.60s)
 
 ## Summary
 

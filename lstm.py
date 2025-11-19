@@ -171,7 +171,8 @@ def create_prediction_graph(predictions_df, model_name, result_dir, target_col):
         year_label = year_2025_data['date'].dt.year.iloc[0] if len(year_2025_data) > 0 else 2025
         plt.xlabel(f'Date (Year {year_label})', fontsize=12, fontweight='bold')
         plt.ylabel('Water Level', fontsize=12, fontweight='bold')
-        plt.title(f'{model_name.upper()} Model: Prediction vs Actual Water Level ({year_label})', fontsize=14, fontweight='bold')
+        plt.title(f'GRU Model: Prediction vs Actual Water Level ({year_label})', fontsize=14, fontweight='bold')
+        #plt.title(f'{model_name.upper()} Model: Prediction vs Actual Water Level ({year_label})', fontsize=14, fontweight='bold')
         plt.legend(fontsize=11)
         plt.grid(True, alpha=0.3)
         plt.xticks(rotation=45)
