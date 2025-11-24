@@ -1,6 +1,6 @@
 # GRU Model Results
 
-**Generated on:** 2025-11-18 18:49:22
+**Generated on:** 2025-11-24 13:47:22
 
 ## Model Architecture
 
@@ -13,15 +13,15 @@
 
 ## Performance Metrics
 
-- **Mean Squared Error (MSE):** 0.1647
-- **Root Mean Squared Error (RMSE):** 0.4059
-- **Mean Absolute Error (MAE):** 0.3456
-- **R² Score:** 0.9788
-- **Accuracy (R² × 100):** 97.88%
-- **MAPE:** 10.10%
+- **Mean Squared Error (MSE):** 0.0920
+- **Root Mean Squared Error (RMSE):** 0.3033
+- **Mean Absolute Error (MAE):** 0.2168
+- **R² Score:** 0.9882
+- **Accuracy (R² × 100):** 98.82%
+- **MAPE:** 6.30%
 
 ## Timing Information
 
-- **Start time:** 2025-11-18 18:40:41
-- **End time:** 2025-11-18 18:49:22
-- **Duration:** 521.00 seconds (8.68 minutes)
+- **Start time:** 2025-11-24 13:37:09
+- **End time:** 2025-11-24 13:47:22
+- **Duration:** 613.38 seconds (10.22 minutes)

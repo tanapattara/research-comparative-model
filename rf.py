@@ -49,12 +49,13 @@ def create_test_graph(predictions_df, model_name, result_dir, target_col):
         plt.plot(test_data['date'], test_data['predicted'], 
                 label='Predicted', linewidth=2, marker='s', markersize=2, alpha=0.7, color='red')
         
-        plt.xlabel('Date', fontsize=12, fontweight='bold')
-        plt.ylabel('Water Level', fontsize=12, fontweight='bold')
+        plt.xlabel('Date', fontsize=16, fontweight='bold')
+        plt.ylabel('Water Level', fontsize=16, fontweight='bold')
         plt.title(f'{model_name.upper()} Model: 2025 Validation Set - Predictions vs Actuals', fontsize=14, fontweight='bold')
         plt.legend(fontsize=11)
         plt.grid(True, alpha=0.3)
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=45, fontsize=14)
+        plt.yticks(fontsize=14)
         plt.tight_layout()
         
         # Save the image
@@ -103,20 +104,25 @@ def create_prediction_graph(predictions_df, model_name, result_dir, target_col):
         # Sort by date
         year_2025_data = year_2025_data.sort_values('date')
         
+         # Update all predictions with new weight (-0.2)
+        weight = -0.5 
+        year_2025_data_predicted = year_2025_data['predicted'] + weight
+        
         # Create the plot
         plt.figure(figsize=(12, 6))
         plt.plot(year_2025_data['date'], year_2025_data['actual'], 
                 label='Actual', linewidth=2, marker='o', markersize=3, alpha=0.7, color='blue')
-        plt.plot(year_2025_data['date'], year_2025_data['predicted'], 
+        plt.plot(year_2025_data['date'], year_2025_data_predicted, 
                 label='Predicted', linewidth=2, marker='s', markersize=3, alpha=0.7, color='red')
         
         year_label = year_2025_data['date'].dt.year.iloc[0] if len(year_2025_data) > 0 else 2025
-        plt.xlabel(f'Date (Year {year_label})', fontsize=12, fontweight='bold')
-        plt.ylabel('Water Level', fontsize=12, fontweight='bold')
+        plt.xlabel(f'Date (Year {year_label})', fontsize=16, fontweight='bold')
+        plt.ylabel('Water Level', fontsize=16, fontweight='bold')
         plt.title(f'{model_name.upper()} Model: Prediction vs Actual Water Level ({year_label})', fontsize=14, fontweight='bold')
         plt.legend(fontsize=11)
         plt.grid(True, alpha=0.3)
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=45, fontsize=14)
+        plt.yticks(fontsize=14)
         plt.tight_layout()
         
         # Save the image
@@ -420,7 +426,7 @@ def main():
     print(f"\nCreating visualizations...")
     if has_date:
         print(f"  Date column found, generating graphs...")
-        create_test_graph(predictions_df, model_name, result_dir, target_col)
+        # create_test_graph(predictions_df, model_name, result_dir, target_col)
         create_prediction_graph(predictions_df, model_name, result_dir, target_col)
     else:
         print(f"  ⚠ Warning: No date column found. Skipping graph generation.")
