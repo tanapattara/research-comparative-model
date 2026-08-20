@@ -1,27 +1,27 @@
 # E0 Data Audit - Mekong Multi-Horizon Forecasting
 
-**Gate status: BLOCKED**
+**Gate status: PASS**
 
 This is a data-integrity report, not a modelling result. No neural model was trained, and synthetic smoke-test scores are not research evidence.
 
 ## Processed dataset
 
-- File: `D:\repo\research-comparative-model\P1\data\data.csv`
-- SHA-256: `2d73da16de8e23c22adfd2394cd0075161db8faa9add4a75ef487bef7ad33ae6`
-- Rows / columns: 7,011 / `date, CSA, LUA, CKH, VIE, NON`
+- File: `D:\repo\research-comparative-model\paper2\Paper2_Experiment_Starter\paper2_experiment_suite\data\private\mekong_daily_2007_2025_raw_missing.csv`
+- SHA-256: `68369e847639ffc50ef0ff0fc94aadd62e04388589207598650e360c7dad7be4`
+- Rows / columns: 6,890 / `date, CSA, LUA, CKH, VIE, NON`
 - Schema/order exact: True
-- Date range: 2006-01-01 to 2025-11-11
-- Invalid / duplicate / missing-calendar dates: 0 / 0 / 244
+- Date range: 2007-01-01 to 2025-11-11
+- Invalid / duplicate / missing-calendar dates: 0 / 0 / 0
 
-The processed table appears complete because Paper 1 preprocessing already interpolated zero/NaN values over the entire record. It is not evidence that the raw observations were complete.
+This is a newly reconstructed daily table. Zeros are stored as missing, missing values are preserved, and no interpolation or target imputation was applied.
 
 | Station | dtype | start | end | missing | zeros | min m | max m |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| CSA | float64 | 2006-01-01 | 2025-11-11 | 0 | 0 | 0.96 | 10.57 |
-| LUA | float64 | 2006-01-01 | 2025-11-11 | 0 | 0 | 2.47 | 20.38 |
-| CKH | float64 | 2006-01-01 | 2025-11-11 | 0 | 0 | 2.07 | 16.8 |
-| VIE | float64 | 2006-01-01 | 2025-11-11 | 0 | 0 | 0.02 | 13.67 |
-| NON | float64 | 2006-01-01 | 2025-11-11 | 0 | 0 | 0.32 | 13.82 |
+| CSA | float64 | 2007-01-01 | 2025-11-11 | 263 | 0 | 0.96 | 10.57 |
+| LUA | float64 | 2007-01-01 | 2025-11-10 | 313 | 0 | 2.47 | 20.38 |
+| CKH | float64 | 2007-01-01 | 2025-11-11 | 433 | 0 | 2.07 | 16.8 |
+| VIE | float64 | 2007-01-01 | 2025-11-10 | 384 | 0 | 0.02 | 13.67 |
+| NON | float64 | 2007-01-01 | 2025-11-11 | 253 | 0 | 0.32 | 13.82 |
 
 ## Raw station files (no interpolation)
 
@@ -41,34 +41,34 @@ Zero values are missing candidates because Paper 1 treated them as missing; conf
 
 | Station | unit | unit status | datum |
 | --- | --- | --- | --- |
-| CSA | m | reported_not_independently_verified | UNVERIFIED |
-| LUA | m | reported_not_independently_verified | UNVERIFIED |
-| CKH | m | reported_not_independently_verified | UNVERIFIED |
-| VIE | m | reported_not_independently_verified | UNVERIFIED |
-| NON | m | reported_not_independently_verified | Paper 1 states zero gauge = 153.6 m MSL; agency verification required |
+| CSA | m | verified | station-specific local gauge datum; researcher-confirmed |
+| LUA | m | verified | station-specific local gauge datum; researcher-confirmed |
+| CKH | m | verified | station-specific local gauge datum; researcher-confirmed |
+| VIE | m | verified | station-specific local gauge datum; researcher-confirmed |
+| NON | m | verified | zero gauge 153.6 m MSL; researcher-confirmed |
 
-Alarm check: 165.0 - 153.6 = **11.4 m**, not the stated **11.0 m** (difference 0.4 m).
+Paper 1 states an alarm gauge height of 11.0 m, but 165.0 - 153.6 = **11.4 m**. The corrected, researcher-confirmed value used by Paper 2 is 11.4 m.
 Flood check: 165.8 - 153.6 = 12.2 m, matching the stated 12.2 m.
 
 ## Fold coverage and purge
 
 | Fold | partition | requested | effective | full coverage | latest issue |
 | --- | --- | --- | --- | --- | --- |
-| A | train | 2006-01-01 to 2016-12-31 | 2006-01-01 to 2016-12-31 | True | 2016-12-17 |
+| A | train | 2007-01-01 to 2016-12-31 | 2007-01-01 to 2016-12-31 | True | 2016-12-17 |
 | A | validation | 2017-01-01 to 2017-12-31 | 2017-01-01 to 2017-12-31 | True | 2017-12-17 |
 | A | test | 2018-01-01 to 2018-12-31 | 2018-01-01 to 2018-12-31 | True | 2018-12-17 |
-| B | train | 2006-01-01 to 2018-12-31 | 2006-01-01 to 2018-12-31 | True | 2018-12-17 |
+| B | train | 2007-01-01 to 2018-12-31 | 2007-01-01 to 2018-12-31 | True | 2018-12-17 |
 | B | validation | 2019-01-01 to 2019-12-31 | 2019-01-01 to 2019-12-31 | True | 2019-12-17 |
 | B | test | 2020-01-01 to 2020-12-31 | 2020-01-01 to 2020-12-31 | True | 2020-12-17 |
-| C | train | 2006-01-01 to 2020-12-31 | 2006-01-01 to 2020-12-31 | True | 2020-12-17 |
+| C | train | 2007-01-01 to 2020-12-31 | 2007-01-01 to 2020-12-31 | True | 2020-12-17 |
 | C | validation | 2021-01-01 to 2021-12-31 | 2021-01-01 to 2021-12-31 | True | 2021-12-17 |
 | C | test | 2022-01-01 to 2022-12-31 | 2022-01-01 to 2022-12-31 | True | 2022-12-17 |
-| D | train | 2006-01-01 to 2022-12-31 | 2006-01-01 to 2022-12-31 | True | 2022-12-17 |
+| D | train | 2007-01-01 to 2022-12-31 | 2007-01-01 to 2022-12-31 | True | 2022-12-17 |
 | D | validation | 2023-01-01 to 2023-12-31 | 2023-01-01 to 2023-12-31 | True | 2023-12-17 |
 | D | test | 2024-01-01 to 2024-12-31 | 2024-01-01 to 2024-12-31 | True | 2024-12-17 |
-| final_period | train | 2006-01-01 to 2023-12-31 | 2006-01-01 to 2023-12-31 | True | 2023-12-17 |
+| final_period | train | 2007-01-01 to 2023-12-31 | 2007-01-01 to 2023-12-31 | True | 2023-12-17 |
 | final_period | validation | 2024-01-01 to 2024-12-31 | 2024-01-01 to 2024-12-31 | True | 2024-12-17 |
-| final_period | test | 2025-01-01 to 2025-11-30 | 2025-01-01 to 2025-11-11 | False | 2025-10-28 |
+| final_period | test | 2025-01-01 to 2025-11-11 | 2025-01-01 to 2025-11-11 | True | 2025-10-28 |
 
 The 2025 record is a **final-period test**, not an untouched holdout. Its effective end and latest issue date must follow the corrected dataset and the 14-day target window.
 
@@ -86,20 +86,20 @@ The 2025 record is a **final-period test**, not an untouched holdout. Its effect
 
 ## Blocking issues before E1
 
-- **MISSING_CALENDAR_DAYS** - The processed table is not daily-continuous.
-- **GLOBAL_INTERPOLATION_PROVENANCE** - Paper 1 data.csv was interpolated across the full record before temporal splitting; rebuild from raw station files with missing values preserved.
-- **RAW_MISSINGNESS_REQUIRES_POLICY** - Raw files contain zero/blank missing candidates; exclude missing NON targets and freeze a causal input policy.
-- **UNITS_UNVERIFIED** - Units require source/agency verification for: CSA, LUA, CKH, VIE, NON.
-- **DATUMS_UNVERIFIED** - Gauge datums require verification for: CSA, LUA, CKH, VIE, NON.
-- **NON_ALARM_THRESHOLD_INCONSISTENT** - 165.0 - 153.6 = 11.4 m, not the 11.0 m alarm gauge height stated in Paper 1.
 
-## Decisions/actions still required
+## Remaining documentation actions before the final manuscript
 
-1. Rebuild a non-interpolated daily table from raw sources, preserving missing values and quality flags.
-2. Confirm whether zero codes mean missing for every station.
-3. Freeze a causal fold-local missing-input policy; never impute NON targets.
-4. Verify units and gauge datums for all five stations with an authoritative source.
-5. Resolve whether the Nong Khai alarm is 11.0 m, 11.4 m, or a different current official threshold.
-6. Freeze the effective 2025 end date after corrected data are available.
+1. Add authoritative citations for the station-specific gauge datums.
+2. Document the Paper 1 alarm-height correction from 11.0 m to 11.4 m.
 
-Neural training remains prohibited while E0 is BLOCKED.
+E0 is PASS. E1 may run only with the frozen complete-case S4 origin policy and train-only preprocessing.
+
+## Resolved researcher decisions
+
+- Zero means missing.
+- The common study start is 2007-01-01.
+- Primary missing-input handling is complete-window exclusion; no imputation.
+- Missing NON targets are never filled.
+- Units are metres and station datums were researcher-confirmed.
+- Nong Khai alarm gauge height is 11.4 m from 165.0 - 153.6; flood height is 12.2 m.
+- The final-period test ends on the actual available date 2025-11-11.

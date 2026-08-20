@@ -1,33 +1,60 @@
 # Paper 2 phase commands
 
-Run from this directory with `PYTHONPATH=src` (PowerShell: `$env:PYTHONPATH='src'`).
+Run from this directory with the package source on `PYTHONPATH`.
 
-## E0 - data audit (implemented; no model training)
-
-```bash
-python -m paper2_forecast.run_e0 --config configs/e0.yaml
+```powershell
+$env:PYTHONPATH='src'
 ```
 
-The command writes `artifacts/e0/data_manifest.json` and
-`reports/e0_data_audit.md`. Exit code 2 means that the data gate is blocked.
-For report regeneration in CI without hiding the blocked status in the manifest:
+## Prepare the raw-preserved Paper 2 dataset
 
-```bash
-python -m paper2_forecast.run_e0 --config configs/e0.yaml --allow-blocked-exit-zero
+This creates a new table and never modifies the Paper 1 station files.
+
+```powershell
+python -m paper2_forecast.run_prepare_data `
+  --raw-directory ../../../P1/data `
+  --output data/private/mekong_daily_2007_2025_raw_missing.csv `
+  --manifest artifacts/e0/raw_dataset_build_manifest.json `
+  --start 2007-01-01 `
+  --end 2025-11-11
 ```
 
-## E1-E5 - explicit safety gates
+## E0 - resolved data-integrity gate
 
-These commands exist separately, but intentionally stop before importing or
-training neural models until E0 is `PASS` and the researcher explicitly approves
-the next phase.
+```powershell
+python -m paper2_forecast.run_e0_resolved --config configs/e0_resolved.yaml
+```
 
-```bash
-python -m paper2_forecast.run_phase --phase E1
+Expected gate output is `E0_STATUS=PASS` and `BLOCKING_ISSUES=0`.
+
+## E1 - Paper 1 continuity baseline and strategy comparison
+
+Install the neural extra first. E1 reads validation partitions only and does not
+open any test result.
+
+`powershell
+python -m pip install -e ".[neural]"
+python -m paper2_forecast.run_e1 --config configs/e1_strategy.yaml --baselines-only
+python -m paper2_forecast.run_e1 --config configs/e1_strategy.yaml
+python -m paper2_forecast.run_e1_analysis
+```
+
+The last command performs 2,000 paired moving-block bootstrap repetitions,
+Diebold-Mariano tests with HAC lag `h-1`, and Holm correction. The final neural
+runs in later phases must use all declared seeds; E1 uses seed 42 only for
+strategy development.
+
+## E2-E5 - explicit safety gates
+
+These phases remain separate and will stop unless their prerequisite state and
+researcher approval are present.
+
+```powershell
 python -m paper2_forecast.run_phase --phase E2
 python -m paper2_forecast.run_phase --phase E3
 python -m paper2_forecast.run_phase --phase E4
 python -m paper2_forecast.run_phase --phase E5
 ```
 
-Synthetic smoke artifacts verify software plumbing only and are not research results.
+Synthetic smoke artifacts verify software plumbing only and are never research
+results.
