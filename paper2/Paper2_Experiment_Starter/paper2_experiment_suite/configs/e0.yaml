@@ -1,0 +1,54 @@
+phase: E0
+
+data:
+  csv_path: "../../../../P1/data/data.csv"
+  raw_station_directory: "../../../../P1/data"
+  preprocessing_source: "../../../../P1/data/data-processing.py"
+  date_column: date
+  stations: [CSA, LUA, CKH, VIE, NON]
+  target: NON
+  source_kind: "Paper 1 processed merged dataset"
+  known_global_interpolation_before_split: true
+  zero_values_are_missing_candidates: true
+
+station_metadata:
+  CSA: {name: Chiang Saen, unit: m, unit_status: reported_not_independently_verified, datum: UNVERIFIED}
+  LUA: {name: Luang Prabang, unit: m, unit_status: reported_not_independently_verified, datum: UNVERIFIED}
+  CKH: {name: Chiang Khan, unit: m, unit_status: reported_not_independently_verified, datum: UNVERIFIED}
+  VIE: {name: Vientiane, unit: m, unit_status: reported_not_independently_verified, datum: UNVERIFIED}
+  NON:
+    name: Nong Khai
+    unit: m
+    unit_status: reported_not_independently_verified
+    datum: "Paper 1 states zero gauge = 153.6 m MSL; agency verification required"
+
+nong_khai_thresholds:
+  zero_gauge_elevation_m_msl: 153.6
+  alarm_elevation_m_msl: 165.0
+  stated_alarm_gauge_height_m: 11.0
+  flood_elevation_m_msl: 165.8
+  stated_flood_gauge_height_m: 12.2
+
+forecast:
+  output_days: 14
+  lookback_days: [7, 14, 30, 60]
+  report_horizons: [1, 3, 5, 7, 14]
+
+folds:
+  - {name: A, train: ["2006-01-01", "2016-12-31"], validation: ["2017-01-01", "2017-12-31"], test: ["2018-01-01", "2018-12-31"]}
+  - {name: B, train: ["2006-01-01", "2018-12-31"], validation: ["2019-01-01", "2019-12-31"], test: ["2020-01-01", "2020-12-31"]}
+  - {name: C, train: ["2006-01-01", "2020-12-31"], validation: ["2021-01-01", "2021-12-31"], test: ["2022-01-01", "2022-12-31"]}
+  - {name: D, train: ["2006-01-01", "2022-12-31"], validation: ["2023-01-01", "2023-12-31"], test: ["2024-01-01", "2024-12-31"]}
+  - {name: final_period, train: ["2006-01-01", "2023-12-31"], validation: ["2024-01-01", "2024-12-31"], test: ["2025-01-01", "2025-11-30"]}
+
+policies:
+  interpolate_before_split: false
+  impute_missing_target: false
+  scaler_fit_scope: train_only
+  clip_validation_test: false
+  common_forecast_origins: true
+  purge_days: 14
+
+output:
+  manifest: "../artifacts/e0/data_manifest.json"
+  report: "../reports/e0_data_audit.md"

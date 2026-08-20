@@ -1,0 +1,21 @@
+data:
+  csv_path: "/absolute/path/to/mekong_daily_water_levels.csv"
+  date_column: date
+  stations: [CSA, LUA, CKH, VIE, NON]
+  target: NON
+  unit: metres
+  missing_input_policy: "TO_BE_FROZEN"
+  allow_target_missing: false
+
+forecast:
+  lookback_days: 60
+  output_days: 14
+  report_horizons: [1, 3, 5, 7, 14]
+
+evaluation:
+  purge_days: 14
+  common_forecast_origins: true
+  scaler_fit_scope: train_only
+  clip_scaled_values: false
+  random_seeds: [42, 52, 62, 72, 82]
+

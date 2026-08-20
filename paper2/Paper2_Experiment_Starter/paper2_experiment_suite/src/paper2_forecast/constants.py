@@ -1,0 +1,3 @@
+STATIONS = ("CSA", "LUA", "CKH", "VIE", "NON")
+TARGET = "NON"
+
