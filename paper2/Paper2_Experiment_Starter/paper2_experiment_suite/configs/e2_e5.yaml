@@ -1,0 +1,75 @@
+phase: E2-E5
+
+gates:
+  e1_manifest: "../artifacts/e1_strategy/manifest.json"
+  e2_manifest: "../artifacts/e2_architecture/manifest.json"
+  e3_manifest: "../artifacts/e3_lookback/manifest.json"
+  e4_manifest: "../artifacts/e4_stations/manifest.json"
+
+data:
+  csv_path: "../data/private/mekong_daily_2007_2025_raw_missing.csv"
+  stations: [CSA, LUA, CKH, VIE, NON]
+  target: NON
+  unit: m
+
+forecast:
+  strategy: mimo
+  output_days: 14
+  report_horizons: [1, 3, 5, 7, 14]
+  lookback_candidates: [7, 14, 30, 60]
+
+folds:
+  - {name: A, train_start: "2007-01-01", train_end: "2016-12-31", validation_start: "2017-01-01", validation_end: "2017-12-31", test_start: "2018-01-01", test_end: "2018-12-31", purge_days: 14}
+  - {name: B, train_start: "2007-01-01", train_end: "2018-12-31", validation_start: "2019-01-01", validation_end: "2019-12-31", test_start: "2020-01-01", test_end: "2020-12-31", purge_days: 14}
+  - {name: C, train_start: "2007-01-01", train_end: "2020-12-31", validation_start: "2021-01-01", validation_end: "2021-12-31", test_start: "2022-01-01", test_end: "2022-12-31", purge_days: 14}
+  - {name: D, train_start: "2007-01-01", train_end: "2022-12-31", validation_start: "2023-01-01", validation_end: "2023-12-31", test_start: "2024-01-01", test_end: "2024-12-31", purge_days: 14}
+  - {name: final_period, train_start: "2007-01-01", train_end: "2023-12-31", validation_start: "2024-01-01", validation_end: "2024-12-31", test_start: "2025-01-01", test_end: "2025-11-11", purge_days: 14}
+
+training:
+  hidden_size: 64
+  num_layers: 2
+  dropout: 0.2
+  learning_rate: 0.001
+  batch_size: 32
+  max_epochs: 100
+  early_stopping_patience: 10
+  scheduler_factor: 0.5
+  scheduler_patience: 5
+
+architectures:
+  lstm: {}
+  tcn_gru:
+    conv_channels: 32
+    kernel_size: 3
+  compact_transformer:
+    model_dimension: 32
+    attention_heads: 4
+    feedforward_dimension: 64
+
+final_evaluation:
+  seeds: [42, 52, 62, 72, 82]
+  official_alarm_gauge_height_m: 11.4
+  bootstrap_repetitions: 2000
+  primary_block_length_days: 30
+  sensitivity_block_lengths_days: [14, 60]
+
+optuna:
+  trials_per_architecture: 30
+  sampler_seed: 20260823
+  development_seed: 42
+  lookback_days: 60
+  max_epochs: 25
+  early_stopping_patience: 5
+  architecture_max_epochs: {compact_transformer: 15}
+  architecture_early_stopping_patience: {compact_transformer: 4}
+  refit_max_epochs: 100
+  refit_early_stopping_patience: 10
+  minimum_completed_folds_before_pruning: 2
+  post_hoc_after_test_opened: true
+
+outputs:
+  e2: "../artifacts/e2_architecture"
+  e2_optuna: "../artifacts/e2_optuna_posthoc"
+  e3: "../artifacts/e3_lookback"
+  e4: "../artifacts/e4_stations"
+  e5: "../artifacts/e5_final"

@@ -44,17 +44,26 @@ Diebold-Mariano tests with HAC lag `h-1`, and Holm correction. The final neural
 runs in later phases must use all declared seeds; E1 uses seed 42 only for
 strategy development.
 
-## E2-E5 - explicit safety gates
+## E2-E5 - gated research phases
 
-These phases remain separate and will stop unless their prerequisite state and
-researcher approval are present.
+These phases remain separate and stop unless the preceding manifest has a
+`COMPLETE*` status. Each training job is checkpointed in its phase artifact
+directory, so rerunning the same command resumes completed work.
 
 ```powershell
-python -m paper2_forecast.run_phase --phase E2
-python -m paper2_forecast.run_phase --phase E3
-python -m paper2_forecast.run_phase --phase E4
-python -m paper2_forecast.run_phase --phase E5
+python -m paper2_forecast.run_phase --phase E2 --config configs/e2_e5.yaml
+python -m paper2_forecast.run_phase --phase E3 --config configs/e2_e5.yaml
+python -m paper2_forecast.run_phase --phase E4 --config configs/e2_e5.yaml
+python -m paper2_forecast.run_phase --phase E5 --config configs/e2_e5.yaml
 ```
+
+E2 records a protocol deviation because the draft 30-Optuna-trial budget is
+not implemented: it compares three frozen compact configurations. E3 applies
+the one-standard-error look-back rule, E4 retrains all incremental and
+leave-one-out station sets on common S4 origins, and E5 opens test partitions
+only after the preceding manifests exist. E5 runs five seeds for S0 and S4,
+including the 2025 final period, and exports paired inference and high-water
+event metrics.
 
 Synthetic smoke artifacts verify software plumbing only and are never research
 results.
