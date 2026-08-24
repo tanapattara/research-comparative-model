@@ -43,6 +43,8 @@ jobs:
             --raw-directory "${{ github.workspace }}/P1/data" \
             --output "$PRIVATE_DATA_DIR/mekong_daily_2007_2025_raw_missing.csv" \
             --manifest "$PRIVATE_DATA_DIR/reconstruction_manifest.json"
+          mkdir -p data
+          ln -s "$PRIVATE_DATA_DIR" data/private
 
       - name: Run exactly 41 unit tests
         run: |
