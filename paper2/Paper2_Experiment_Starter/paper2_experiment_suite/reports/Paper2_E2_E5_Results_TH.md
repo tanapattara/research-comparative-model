@@ -154,12 +154,26 @@ E2 ไม่ได้ใช้ Optuna 30 trials ต่อ architecture ตาม
 
 TCN-GRU ได้อันดับหนึ่งใน sensitivity analysis นี้ โดย best trial ใช้ `hidden_size=32`, `num_layers=2`, `conv_channels=64`, `kernel_size=3`, `dropout=0`, `batch_size=64` และ `learning_rate=0.0007541958` อย่างไรก็ตาม ห้ามนำผลนี้ไปย้อนแก้ E2 selection หรือประเมินซ้ำบน E5 test เดิมเพื่ออ้างผลยืนยัน หากต้องการยกระดับ TCN-GRU เป็นโมเดลหลัก ต้อง freeze configuration นี้ล่วงหน้าแล้วประเมินกับ prospective holdout ใหม่
 
+### E3 ของ Optuna winner แบบ post-hoc
+
+นำ TCN-GRU trial 15 จาก E2 Optuna มาประเมิน look-back 7, 14, 30 และ 60 วันบน validation folds A–D รวม 16 training jobs ทุก candidate ใช้ origins ที่ผ่านเงื่อนไขประวัติสูงสุด 60 วันเหมือนกัน และใช้ objective เป็น MAE เฉลี่ยที่ day 7 และ 14
+
+| Look-back | Objective mean MAE (m) | Fold SE (m) | อยู่ใน one-SE ของค่าดีที่สุด |
+|---:|---:|---:|---|
+| 7 | 0.842822 | 0.015777 | ไม่ใช่ |
+| 14 | 0.827126 | 0.017581 | ไม่ใช่ |
+| 30 | 0.813334 | 0.025673 | ไม่ใช่ |
+| 60 | **0.770217** | 0.023033 | ใช่ |
+
+one-standard-error threshold เท่ากับ 0.793249 m จึงมีเพียง look-back 60 วันที่ผ่านเกณฑ์ และ E3 post-hoc เลือก **60 วัน** ผลนี้ต่างจาก frozen E3 ซึ่งเลือก LSTM look-back 7 วัน เพราะทั้ง architecture และ hyperparameters ต่างกัน จึงเป็น sensitivity result แยกชุด ไม่แทน E3/E4/E5 เดิมและไม่อนุญาตให้นำไปทดสอบซ้ำบน E5 test เดิมเพื่อกล่าวอ้างผลยืนยัน
+
 การทดลอง direct-independent แบบ optional และ prospective 2026 holdout ไม่อยู่ในผลชุดนี้
 
 ## 9. การตรวจสอบและไฟล์ผลลัพธ์
 
-- Regression tests ผ่าน 36/36
+- Regression tests ผ่าน 38/38
 - E2 Optuna post-hoc trials: 90 (30 ต่อ architecture; failed/running 0)
+- E3 Optuna-winner post-hoc training jobs: 16/16
 - E2 training jobs: 12
 - E3 training jobs: 16
 - E4 training jobs: 36
@@ -175,6 +189,10 @@ TCN-GRU ได้อันดับหนึ่งใน sensitivity analysis �
 - `artifacts/e2_optuna_posthoc/manifest.json`
 - `artifacts/e2_optuna_posthoc/optuna_studies.sqlite3`
 - `artifacts/e3_lookback/E3_RESULTS.md`
+- `artifacts/e3_optuna_posthoc/E3_OPTUNA_POSTHOC_RESULTS.md`
+- `artifacts/e3_optuna_posthoc/lookback_selection.csv`
+- `artifacts/e3_optuna_posthoc/fold_objectives.csv`
+- `artifacts/e3_optuna_posthoc/manifest.json`
 - `artifacts/e4_stations/E4_RESULTS.md`
 - `artifacts/e5_final/E5_RESULTS.md`
 - `artifacts/e5_final/final_metric_summary.csv`

@@ -71,5 +71,6 @@ outputs:
   e2: "../artifacts/e2_architecture"
   e2_optuna: "../artifacts/e2_optuna_posthoc"
   e3: "../artifacts/e3_lookback"
+  e3_optuna: "../artifacts/e3_optuna_posthoc"
   e4: "../artifacts/e4_stations"
   e5: "../artifacts/e5_final"

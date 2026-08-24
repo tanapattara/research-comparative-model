@@ -57,6 +57,14 @@ python -m paper2_forecast.run_phase --phase E4 --config configs/e2_e5.yaml
 python -m paper2_forecast.run_phase --phase E5 --config configs/e2_e5.yaml
 ```
 
+Post-hoc sensitivity commands requested after the E5 test was opened are kept
+in separate artifact directories and never overwrite the frozen E2–E5 chain:
+
+```powershell
+python -m paper2_forecast.e2_optuna --config configs/e2_e5.yaml
+python -m paper2_forecast.e3_optuna --config configs/e2_e5.yaml
+```
+
 E2 records a protocol deviation because the draft 30-Optuna-trial budget is
 not implemented: it compares three frozen compact configurations. E3 applies
 the one-standard-error look-back rule, E4 retrains all incremental and
