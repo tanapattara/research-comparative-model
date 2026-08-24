@@ -17,7 +17,8 @@ exploratory post-hoc chain.
 The frozen research result remains **MIMO + LSTM + 7-day look-back**. The E2
 protocol deviation was recorded before the test partitions were opened. The
 2025 period is not an untouched holdout because it had already been examined in
-Paper 1.
+Paper 1. The primary frozen evidence package is under
+[reproducibility/frozen_e0_e5/](reproducibility/frozen_e0_e5/).
 
 ## Exploratory post-hoc chain
 

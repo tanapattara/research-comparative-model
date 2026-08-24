@@ -1,0 +1,13 @@
+{
+  "phase": "E3",
+  "status": "COMPLETE",
+  "evaluation_partition": "validation_only",
+  "test_results_opened": false,
+  "selected_architecture": "lstm",
+  "selected_lookback_days": 7,
+  "one_standard_error_threshold_m": 0.8148748743370658,
+  "selection_rule": "shortest look-back within one fold-level standard error of the best day-7/day-14 validation MAE",
+  "config_sha256": "732aac703688aa4da140212e690e7b9223209c3f7b2f2e516b7493fa5815d6a3",
+  "e2_manifest_sha256": "d89e2a48e882b54373b67c2dafa2dc51e5c4dc613d513c4f62c24910df3d91c1",
+  "training_jobs": 16
+}

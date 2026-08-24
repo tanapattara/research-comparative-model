@@ -1,0 +1,27 @@
+{
+  "primary_model": "lstm_mimo",
+  "challenger_model": "lstm_recursive_joint",
+  "selected_strategy": "lstm_mimo",
+  "mean_mae_primary_m": 0.8192171592792415,
+  "mean_mae_challenger_m": 0.828659684442287,
+  "challenger_improvement_fraction": -0.011526278540543644,
+  "bootstrap_ci_low_m": -0.0918122304925641,
+  "bootstrap_ci_high_m": 0.03487611721937028,
+  "confidence_supports_challenger": false,
+  "reaches_five_percent_threshold": false,
+  "rationale": "Retain preregistered MIMO because the paired 95% CI does not exclude zero in favour of recursive and the MAE reduction is below the preregistered 5% threshold.",
+  "analysis_partition": "validation_only",
+  "test_results_opened": false,
+  "selection_horizons_days": [
+    7,
+    14
+  ],
+  "bootstrap_repetitions": 2000,
+  "primary_block_length_days": 30,
+  "sensitivity_block_lengths_days": [
+    14,
+    60
+  ],
+  "dm_hac_lag_rule": "horizon_days - 1",
+  "holm_family": "DM tests for validation horizons 7 and 14"
+}

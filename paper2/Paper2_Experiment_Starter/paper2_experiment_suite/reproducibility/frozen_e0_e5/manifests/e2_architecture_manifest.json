@@ -1,0 +1,16 @@
+{
+  "phase": "E2",
+  "status": "COMPLETE_WITH_PROTOCOL_DEVIATION",
+  "evaluation_partition": "validation_only",
+  "test_results_opened": false,
+  "selected_strategy": "mimo",
+  "selected_architecture": "lstm",
+  "selection_rule": "lowest mean validation MAE across folds at days 7 and 14",
+  "architecture_tuning_trials_completed": 0,
+  "protocol_deviations": [
+    "The draft 30-Optuna-trial budget per architecture was not run; E2 compares frozen compact candidate configurations."
+  ],
+  "config_sha256": "732aac703688aa4da140212e690e7b9223209c3f7b2f2e516b7493fa5815d6a3",
+  "e1_manifest_sha256": "112dc7b71489536413ce3bdc0bda67ce1305692c9150a950e07b1606af211823",
+  "training_jobs": 12
+}

@@ -1,0 +1,66 @@
+{
+  "phase": "E4",
+  "status": "COMPLETE",
+  "evaluation_partition": "validation_only",
+  "test_results_opened": false,
+  "selected_architecture": "lstm",
+  "selected_lookback_days": 7,
+  "station_sets": {
+    "S0": [
+      "NON"
+    ],
+    "S1": [
+      "VIE",
+      "NON"
+    ],
+    "S2": [
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S3": [
+      "LUA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4": [
+      "CSA",
+      "LUA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4-CSA": [
+      "LUA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4-LUA": [
+      "CSA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4-CKH": [
+      "CSA",
+      "LUA",
+      "VIE",
+      "NON"
+    ],
+    "S4-VIE": [
+      "CSA",
+      "LUA",
+      "CKH",
+      "NON"
+    ]
+  },
+  "common_origin_reference": "S4",
+  "weights_retrained_for_every_station_set": true,
+  "hyperparameters_retuned": false,
+  "development_seed": 42,
+  "config_sha256": "732aac703688aa4da140212e690e7b9223209c3f7b2f2e516b7493fa5815d6a3",
+  "e3_manifest_sha256": "5bb9b8c742445861d297f55509699a486975a21bc8e0b37730eee5b49180881b",
+  "training_jobs": 36
+}

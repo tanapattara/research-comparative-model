@@ -31,7 +31,9 @@ look-back**. The E2/E3 Optuna analyses and the resulting E4/E5 TCN-GRU analyses
 were performed later. They are **exploratory post-hoc analyses**; E5 reuses test
 partitions whose results had already been opened. They do not replace the frozen
 chain and do not support a claim that TCN-GRU is superior to the frozen LSTM.
-The compact evidence package is under
+The primary frozen evidence package is under
+[reproducibility/frozen_e0_e5/](reproducibility/frozen_e0_e5/). The separate
+compact post-hoc evidence package is under
 [reproducibility/posthoc_e4_e5/](reproducibility/posthoc_e4_e5/).
 
 A configuration must be frozen in advance and evaluated on genuinely unseen

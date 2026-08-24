@@ -1,0 +1,16 @@
+fold,threshold_name,threshold_m
+A,official_alarm,11.4
+A,train_q90,8.84
+A,train_q95,10.08
+B,official_alarm,11.4
+B,train_q90,8.88
+B,train_q95,10.105
+C,official_alarm,11.4
+C,train_q90,8.636000000000005
+C,train_q95,9.8
+D,official_alarm,11.4
+D,train_q90,8.42
+D,train_q95,9.57
+final_period,official_alarm,11.4
+final_period,train_q90,8.309000000000006
+final_period,train_q95,9.508999999999997

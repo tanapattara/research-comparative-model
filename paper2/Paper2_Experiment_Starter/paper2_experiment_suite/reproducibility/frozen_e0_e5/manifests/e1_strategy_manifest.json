@@ -1,0 +1,137 @@
+{
+  "phase": "E1",
+  "status": "COMPLETE",
+  "research_results": true,
+  "evaluation_partition": "validation_only",
+  "test_results_opened": false,
+  "data_path": "D:\\repo\\research-comparative-model\\paper2\\Paper2_Experiment_Starter\\paper2_experiment_suite\\data\\private\\mekong_daily_2007_2025_raw_missing.csv",
+  "data_sha256": "68369e847639ffc50ef0ff0fc94aadd62e04388589207598650e360c7dad7be4",
+  "config_path": "D:\\repo\\research-comparative-model\\paper2\\Paper2_Experiment_Starter\\paper2_experiment_suite\\configs\\e1_strategy.yaml",
+  "config_sha256": "ccc0bc2d86d7241b79b4d17d7e1dec6551cf97c3ce17b3a6ec31298124c2b99f",
+  "e0_manifest_sha256": "52c401be51ee095268fe63d31b878ac1ff44c59771c94ce23ab5f1dde3b0482e",
+  "seeds": [
+    42
+  ],
+  "versions": {
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "scikit_learn": "1.9.0"
+  },
+  "selected_strategy": "lstm_mimo",
+  "selection_rule": "Challenger requires paired 30-day moving-block 95% CI above zero and at least 5% MAE reduction at validation days 7 and 14",
+  "training_records": [
+    {
+      "fold": "A",
+      "seed": 42,
+      "model": "lstm_mimo",
+      "best_epoch": 35,
+      "best_validation_loss": 0.004651295952498913,
+      "parameter_count": 52366,
+      "train_origins": 2519,
+      "validation_origins": 286
+    },
+    {
+      "fold": "A",
+      "seed": 42,
+      "model": "lstm_recursive_joint",
+      "best_epoch": 98,
+      "best_validation_loss": 0.0003911707317456603,
+      "parameter_count": 51781,
+      "train_origins": 2519,
+      "validation_origins": 286
+    },
+    {
+      "fold": "B",
+      "seed": 42,
+      "model": "lstm_mimo",
+      "best_epoch": 24,
+      "best_validation_loss": 0.0037943916395306587,
+      "parameter_count": 52366,
+      "train_origins": 3072,
+      "validation_origins": 62
+    },
+    {
+      "fold": "B",
+      "seed": 42,
+      "model": "lstm_recursive_joint",
+      "best_epoch": 83,
+      "best_validation_loss": 0.0005749525735154748,
+      "parameter_count": 51781,
+      "train_origins": 3072,
+      "validation_origins": 62
+    },
+    {
+      "fold": "C",
+      "seed": 42,
+      "model": "lstm_mimo",
+      "best_epoch": 19,
+      "best_validation_loss": 0.005142562557011843,
+      "parameter_count": 52366,
+      "train_origins": 3364,
+      "validation_origins": 277
+    },
+    {
+      "fold": "C",
+      "seed": 42,
+      "model": "lstm_recursive_joint",
+      "best_epoch": 97,
+      "best_validation_loss": 0.00035528745502233505,
+      "parameter_count": 51781,
+      "train_origins": 3364,
+      "validation_origins": 277
+    },
+    {
+      "fold": "D",
+      "seed": 42,
+      "model": "lstm_mimo",
+      "best_epoch": 11,
+      "best_validation_loss": 0.013291840441524982,
+      "parameter_count": 52366,
+      "train_origins": 3849,
+      "validation_origins": 38
+    },
+    {
+      "fold": "D",
+      "seed": 42,
+      "model": "lstm_recursive_joint",
+      "best_epoch": 58,
+      "best_validation_loss": 0.00019044577493332326,
+      "parameter_count": 51781,
+      "train_origins": 3849,
+      "validation_origins": 38
+    }
+  ],
+  "raw_lower_mae_model": "lstm_mimo",
+  "strategy_decision": {
+    "primary_model": "lstm_mimo",
+    "challenger_model": "lstm_recursive_joint",
+    "selected_strategy": "lstm_mimo",
+    "mean_mae_primary_m": 0.8192171592792415,
+    "mean_mae_challenger_m": 0.828659684442287,
+    "challenger_improvement_fraction": -0.011526278540543644,
+    "bootstrap_ci_low_m": -0.0918122304925641,
+    "bootstrap_ci_high_m": 0.03487611721937028,
+    "confidence_supports_challenger": false,
+    "reaches_five_percent_threshold": false,
+    "rationale": "Retain preregistered MIMO because the paired 95% CI does not exclude zero in favour of recursive and the MAE reduction is below the preregistered 5% threshold.",
+    "analysis_partition": "validation_only",
+    "test_results_opened": false,
+    "selection_horizons_days": [
+      7,
+      14
+    ],
+    "bootstrap_repetitions": 2000,
+    "primary_block_length_days": 30,
+    "sensitivity_block_lengths_days": [
+      14,
+      60
+    ],
+    "dm_hac_lag_rule": "horizon_days - 1",
+    "holm_family": "DM tests for validation horizons 7 and 14"
+  },
+  "analysis_artifacts": {
+    "inference": "artifacts\\e1_strategy\\strategy_inference.csv",
+    "decision": "artifacts\\e1_strategy\\strategy_decision.json",
+    "report": "reports\\e1_strategy_summary.md"
+  }
+}

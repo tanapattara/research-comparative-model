@@ -1,0 +1,17 @@
+job_key,phase,fold,partition,architecture,lookback_days,station_set,seed,best_epoch,best_validation_loss,parameter_count,train_origins,validation_origins,evaluation_origins
+A|lstm|7|S4|42|validation,E3,A,validation,lstm,7,S4,42,62,0.004756508860737,52366,2522,286,286
+B|lstm|7|S4|42|validation,E3,B,validation,lstm,7,S4,42,23,0.0041494383476674,52366,3077,62,62
+C|lstm|7|S4|42|validation,E3,C,validation,lstm,7,S4,42,30,0.0050235311500728,52366,3370,277,277
+D|lstm|7|S4|42|validation,E3,D,validation,lstm,7,S4,42,21,0.0120793962851166,52366,3856,38,38
+A|lstm|14|S4|42|validation,E3,A,validation,lstm,14,S4,42,25,0.0049393707886338,52366,2522,286,286
+B|lstm|14|S4|42|validation,E3,B,validation,lstm,14,S4,42,17,0.0040641059167683,52366,3077,62,62
+C|lstm|14|S4|42|validation,E3,C,validation,lstm,14,S4,42,22,0.0051189754158258,52366,3370,277,277
+D|lstm|14|S4|42|validation,E3,D,validation,lstm,14,S4,42,13,0.012952440418303,52366,3856,38,38
+A|lstm|30|S4|42|validation,E3,A,validation,lstm,30,S4,42,52,0.0044297347776591,52366,2522,286,286
+B|lstm|30|S4|42|validation,E3,B,validation,lstm,30,S4,42,17,0.0037595112808048,52366,3077,62,62
+C|lstm|30|S4|42|validation,E3,C,validation,lstm,30,S4,42,9,0.005171965342015,52366,3370,277,277
+D|lstm|30|S4|42|validation,E3,D,validation,lstm,30,S4,42,7,0.0135910185053944,52366,3856,38,38
+A|lstm|60|S4|42|validation,E3,A,validation,lstm,60,S4,42,51,0.0044871224090456,52366,2522,286,286
+B|lstm|60|S4|42|validation,E3,B,validation,lstm,60,S4,42,22,0.0036547018680721,52366,3077,62,62
+C|lstm|60|S4|42|validation,E3,C,validation,lstm,60,S4,42,22,0.005030941683799,52366,3370,277,277
+D|lstm|60|S4|42|validation,E3,D,validation,lstm,60,S4,42,21,0.0134062692523002,52366,3856,38,38
