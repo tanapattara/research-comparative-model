@@ -716,11 +716,33 @@ def _station_contributions(metrics: pd.DataFrame, architecture: str) -> pd.DataF
     return pd.DataFrame(rows)
 
 
+def _post_hoc_metadata(
+    prerequisite: dict[str, Any], *, phase: str
+) -> dict[str, Any]:
+    if not prerequisite.get("post_hoc"):
+        return {}
+    metadata: dict[str, Any] = {
+        "post_hoc": True,
+        "post_hoc_reason": (
+            "E5 test results were already opened before the Optuna-derived "
+            f"{phase} configuration was evaluated."
+        ),
+        "does_not_replace_frozen_e2_e5": True,
+    }
+    if phase == "E5":
+        metadata["test_results_already_opened_before_run"] = True
+        metadata["interpretation"] = "exploratory_test_reuse"
+    else:
+        metadata["test_values_read"] = False
+    return metadata
+
+
 def run_e4(config_path: Path) -> Path:
     phase = "E4"
     config, frame, output, config_hash = _base_context(config_path, phase)
     e3_path = _resolve(config_path, str(config["gates"]["e3_manifest"]))
     e3 = _load_manifest(e3_path, phase)
+    post_hoc = bool(e3.get("post_hoc"))
     architecture = str(e3["selected_architecture"])
     lookback = int(e3["selected_lookback_days"])
     jobs = (
@@ -741,7 +763,7 @@ def run_e4(config_path: Path) -> Path:
     contributions.to_csv(output / "station_contributions.csv", index=False)
     manifest = {
         "phase": phase,
-        "status": "COMPLETE",
+        "status": "COMPLETE_POSTHOC" if post_hoc else "COMPLETE",
         "evaluation_partition": "validation_only",
         "test_results_opened": False,
         "selected_architecture": architecture,
@@ -754,13 +776,21 @@ def run_e4(config_path: Path) -> Path:
         "config_sha256": config_hash,
         "e3_manifest_sha256": _sha256(e3_path),
         "training_jobs": len(training),
+        **_post_hoc_metadata(e3, phase=phase),
     }
     _write_json(output / "manifest.json", manifest)
     primary = contributions[contributions["horizon_days"].isin([7, 14])]
     report = [
-        "# E4 Station ablation",
+        "# E4 Station ablation" + (" — post-hoc Optuna-derived sensitivity" if post_hoc else ""),
         "",
-        "> Validation only. Every station set was retrained with frozen hyperparameters on common S4-complete origins.",
+        (
+            "> Validation only. Every station set was retrained with frozen hyperparameters on common S4-complete origins. "
+            + (
+                "This post-hoc result does not replace the frozen E4–E5 chain."
+                if post_hoc
+                else ""
+            )
+        ).rstrip(),
         "",
         "## Day-7 and day-14 contributions",
         "",
@@ -770,7 +800,7 @@ def run_e4(config_path: Path) -> Path:
         "",
     ]
     (output / "E4_RESULTS.md").write_text("\n".join(report), encoding="utf-8")
-    print("E4_STATUS=COMPLETE", flush=True)
+    print(f"E4_STATUS={manifest['status']}", flush=True)
     return output
 
 
@@ -991,7 +1021,7 @@ def _neural_vs_ridge_inference(
             )
             records.append(
                 {
-                    "comparison": "lstm_S4_vs_ridge_S4",
+                    "comparison": f"{architecture}_S4_vs_ridge_S4",
                     "horizon_days": horizon,
                     "block_length_days": block,
                     "n_pairs": len(part),
@@ -1102,6 +1132,7 @@ def run_e5(config_path: Path) -> Path:
     config, frame, output, config_hash = _base_context(config_path, phase)
     e4_path = _resolve(config_path, str(config["gates"]["e4_manifest"]))
     e4 = _load_manifest(e4_path, phase)
+    post_hoc = bool(e4.get("post_hoc"))
     architecture = str(e4["selected_architecture"])
     lookback = int(e4["selected_lookback_days"])
     seeds = [int(value) for value in config["final_evaluation"]["seeds"]]
@@ -1132,7 +1163,12 @@ def run_e5(config_path: Path) -> Path:
     inference = _s4_s0_inference(predictions, architecture)
     inference.to_csv(output / "s4_vs_s0_inference.csv", index=False)
     ridge_inference = _neural_vs_ridge_inference(predictions, architecture)
-    ridge_inference.to_csv(output / "lstm_vs_ridge_inference.csv", index=False)
+    ridge_inference_name = (
+        "lstm_vs_ridge_inference.csv"
+        if architecture == "lstm"
+        else f"{architecture}_vs_ridge_inference.csv"
+    )
+    ridge_inference.to_csv(output / ridge_inference_name, index=False)
     skill_inference = _persistence_skill_inference(predictions, architecture)
     skill_inference.to_csv(output / "persistence_skill_inference.csv", index=False)
     useful = skill_inference[
@@ -1160,7 +1196,11 @@ def run_e5(config_path: Path) -> Path:
     baseline_summary.to_csv(output / "baseline_summary.csv", index=False)
     manifest = {
         "phase": phase,
-        "status": "COMPLETE_WITH_INHERITED_PROTOCOL_DEVIATION",
+        "status": (
+            "COMPLETE_POSTHOC_TEST_REUSE"
+            if post_hoc
+            else "COMPLETE_WITH_INHERITED_PROTOCOL_DEVIATION"
+        ),
         "evaluation_partition": "test_folds_and_2025_final_period",
         "test_results_opened": True,
         "researcher_approval_recorded": True,
@@ -1176,12 +1216,18 @@ def run_e5(config_path: Path) -> Path:
         "primary_block_length_days": 30,
         "sensitivity_block_lengths_days": [14, 60],
         "protocol_deviations_inherited": [
-            "E2 selected architecture from fixed compact configurations without the draft 30-Optuna-trial budget."
+            (
+                "The Optuna-derived E2/E3 configuration was selected after the frozen E5 test results had already been opened; this E5 run reuses those test partitions and is exploratory only."
+                if post_hoc
+                else "E2 selected architecture from fixed compact configurations without the draft 30-Optuna-trial budget."
+            )
         ],
         "config_sha256": config_hash,
         "e4_manifest_sha256": _sha256(e4_path),
         "training_jobs": int((training["architecture"] != "ridge").sum()),
         "ridge_jobs": int((training["architecture"] == "ridge").sum()),
+        "ridge_inference_file": ridge_inference_name,
+        **_post_hoc_metadata(e4, phase=phase),
     }
     _write_json(output / "manifest.json", manifest)
     primary_inference = inference[inference["block_length_days"] == 30]
@@ -1190,9 +1236,16 @@ def run_e5(config_path: Path) -> Path:
         & events["threshold_name"].isin(["official_alarm", "train_q95"])
     ]
     report = [
-        "# E5 Final robustness evaluation",
+        "# E5 Final robustness evaluation" + (" — post-hoc test reuse" if post_hoc else ""),
         "",
-        "> Test-fold and 2025 final-period results. The 2025 period is not described as an untouched holdout because Paper 1 previously examined it.",
+        (
+            "> Test-fold and 2025 final-period results. The 2025 period is not described as an untouched holdout because Paper 1 previously examined it. "
+            + (
+                "The configuration was selected after these test results were opened, so this entire run is exploratory and does not replace frozen E5."
+                if post_hoc
+                else ""
+            )
+        ).rstrip(),
         "",
         "## Frozen configuration",
         "",
@@ -1229,11 +1282,15 @@ def run_e5(config_path: Path) -> Path:
         "## Protocol note",
         "",
         manifest["protocol_deviations_inherited"][0],
-        "Accordingly, final estimates are fully traceable but retain this architecture-tuning limitation.",
+        (
+            "Accordingly, these estimates are fully traceable but exploratory and must not be presented as a new confirmatory test."
+            if post_hoc
+            else "Accordingly, final estimates are fully traceable but retain this architecture-tuning limitation."
+        ),
         "",
     ]
     (output / "E5_RESULTS.md").write_text("\n".join(report), encoding="utf-8")
-    print("E5_STATUS=COMPLETE_WITH_INHERITED_PROTOCOL_DEVIATION", flush=True)
+    print(f"E5_STATUS={manifest['status']}", flush=True)
     return output
 
 

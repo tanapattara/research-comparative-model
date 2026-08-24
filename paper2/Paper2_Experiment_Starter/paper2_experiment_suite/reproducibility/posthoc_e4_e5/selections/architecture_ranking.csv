@@ -1,0 +1,4 @@
+architecture,best_trial_number,search_best_objective_MAE_m,full_refit_objective_MAE_m,complete_trials,pruned_trials
+tcn_gru,15,0.777779488866704,0.77021655491196,18,12
+lstm,22,0.8019606231873071,0.7874799757128839,19,11
+compact_transformer,27,0.8080747533872901,0.8041422272616197,21,9

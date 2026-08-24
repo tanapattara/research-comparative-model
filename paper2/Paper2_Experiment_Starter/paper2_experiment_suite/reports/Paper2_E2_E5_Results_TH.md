@@ -140,6 +140,22 @@ E2 ไม่ได้ใช้ Optuna 30 trials ต่อ architecture ตาม
 
 หลังเปิด test แล้วไม่ควรย้อนกลับไปทำ tuning และนำ configuration ใหม่มาประเมินบน test เดิม เพราะจะทำให้ test leakage เชิงการตัดสินใจ หากต้องการปิด deviation นี้อย่างเคร่งครัด ต้องกำหนด protocol ใหม่และใช้ข้อมูล prospective ที่ยังไม่ถูกเปิด เช่น complete 2026 holdout
 
+> [!WARNING]
+> **สถานะของผล post-hoc ต่อจากจุดนี้:** E5 test results ถูกเปิดก่อนเลือก
+> Optuna-derived configuration ดังนั้นผล E4/E5 ชุดนี้เป็น **exploratory
+> post-hoc test reuse** ไม่ใช่ confirmatory evidence และห้ามใช้แทน frozen
+> E2–E5 เดิม ซึ่งยังคงเป็น **MIMO + LSTM + look-back 7 วัน** ห้ามใช้ผล
+> post-hoc นี้เพื่ออ้างว่า TCN-GRU เหนือกว่า LSTM การยืนยัน configuration
+> ดังกล่าวต้อง freeze ล่วงหน้าและประเมินบน prospective holdout ใหม่ เช่น
+> ข้อมูลปี 2026
+
+> [!CAUTION]
+> Git commit นี้เก็บเฉพาะ manifests และ aggregate summaries ขนาดเล็ก โดยไม่
+> เก็บ private data, row-level predictions, checkpoints หรือ Optuna database
+> จึงยังไม่สามารถตรวจสอบซ้ำหรือคำนวณตัวเลข post-hoc ใหม่จาก Git commit นี้
+> เพียงอย่างเดียวได้ รายการข้อจำกัดอยู่ที่
+> `reproducibility/posthoc_e4_e5/MISSING_ARTIFACTS.md`
+
 ### E2 Optuna 30 trials แบบ post-hoc
 
 ตามคำขอภายหลัง ได้รัน Optuna เพิ่มเติมครบ 30 trials ต่อ architecture โดย objective ใช้เฉพาะค่า validation MAE เฉลี่ยที่ day 7 และ 14 จาก folds A–D ภายใต้ MIMO, S4, look-back 60 วัน และ development seed 42 ตัว objective ไม่ได้อ่าน test values แต่เนื่องจากผล E5 test ถูกเปิดไปแล้ว การทดลองนี้จึงเป็น **post-hoc validation-only sensitivity analysis** และไม่สามารถแทน architecture/configuration ที่ freeze ไว้เดิมได้
@@ -167,13 +183,48 @@ TCN-GRU ได้อันดับหนึ่งใน sensitivity analysis �
 
 one-standard-error threshold เท่ากับ 0.793249 m จึงมีเพียง look-back 60 วันที่ผ่านเกณฑ์ และ E3 post-hoc เลือก **60 วัน** ผลนี้ต่างจาก frozen E3 ซึ่งเลือก LSTM look-back 7 วัน เพราะทั้ง architecture และ hyperparameters ต่างกัน จึงเป็น sensitivity result แยกชุด ไม่แทน E3/E4/E5 เดิมและไม่อนุญาตให้นำไปทดสอบซ้ำบน E5 test เดิมเพื่อกล่าวอ้างผลยืนยัน
 
+### E4 ของ Optuna winner แบบ post-hoc
+
+ใช้ TCN-GRU trial 15 และ look-back 60 วันรัน station ablation บน validation folds A–D ครบ 36 jobs โดย retrain weights แยกทุก station set บน common S4-complete origins ผล contribution ที่ day 7 และ 14 เป็นดังนี้ (ค่าบวกหมายถึงสถานีที่เพิ่ม/คงไว้ช่วยลด MAE):
+
+| Station | Incremental day 7 (m) | Incremental day 14 (m) | Leave-one-out day 7 (m) | Leave-one-out day 14 (m) |
+|---|---:|---:|---:|---:|
+| VIE | -0.008884 | 0.006149 | 0.016887 | 0.037551 |
+| CKH | 0.045961 | -0.012027 | 0.026572 | 0.035696 |
+| LUA | 0.063220 | 0.112798 | 0.014562 | 0.055728 |
+| CSA | **0.134879** | 0.062479 | **0.134879** | 0.062479 |
+
+CSA มี contribution เด่นที่สุดที่ day 7 ส่วน LUA มี incremental contribution เด่นที่สุดที่ day 14 อย่างไรก็ตามผลนี้เป็น validation-only post-hoc sensitivity และไม่แทน frozen E4
+
+### E5 ของ Optuna winner แบบ post-hoc test reuse
+
+ตามคำขอ ได้นำ TCN-GRU + look-back 60 วันไปรันซ้ำบน test folds A–D และ final-period 2025 ด้วย 5 seeds สำหรับ S0/S4 รวม neural 50 jobs และ Ridge 10 jobs เนื่องจาก configuration นี้ถูกเลือกหลังเปิด frozen E5 test แล้ว ผลทั้งหมดในส่วนนี้จึงเป็น **exploratory test reuse** ไม่ใช่ confirmatory test ใหม่
+
+| Comparison | Horizon | Mean MAE improvement (m) | Relative improvement | 95% block-bootstrap CI (m) | Holm p-value |
+|---|---:|---:|---:|---:|---:|
+| S4 เทียบ S0 | 7 | -0.076278 | -12.53% | [-0.158397, -0.015794] | 0.079164 |
+| S4 เทียบ S0 | 14 | 0.010020 | 1.16% | [-0.050873, 0.081953] | 0.737802 |
+
+S4 แย่กว่า S0 ที่ day 7; แม้ unadjusted DM p-value เท่ากับ 0.039582 แต่ Holm-adjusted p-value เท่ากับ 0.079164 จึงไม่ผ่านเกณฑ์หลายการทดสอบ ส่วน day 14 improvement เล็กและ CI คร่อมศูนย์
+
+| Strong-baseline comparison | Horizon | TCN MAE improvement over Ridge (m) | 95% CI (m) | DM p-value |
+|---|---:|---:|---:|---:|
+| TCN-GRU S4 เทียบ Ridge S4 | 7 | -0.113047 | [-0.211610, -0.004744] | 0.006606 |
+| TCN-GRU S4 เทียบ Ridge S4 | 14 | 0.355495 | [0.201648, 0.551516] | 0.004618 |
+
+TCN-GRU แพ้ Ridge อย่างชัดเจนที่ day 7 แต่ชนะ Ridge ที่ day 14 สำหรับ persistence comparison ค่า skill เป็นลบทุก horizon 1–14 และไม่มี horizon ใดที่ 95% CI ของ skill สูงกว่าศูนย์ ดังนั้น predictively useful horizon ของชุด post-hoc นี้คือ **ไม่มี** ผล high-water/event ทั้งหมดยังคงเป็น exploratory evidence
+
 การทดลอง direct-independent แบบ optional และ prospective 2026 holdout ไม่อยู่ในผลชุดนี้
 
 ## 9. การตรวจสอบและไฟล์ผลลัพธ์
 
-- Regression tests ผ่าน 38/38
+- Regression tests ผ่าน 41/41
 - E2 Optuna post-hoc trials: 90 (30 ต่อ architecture; failed/running 0)
 - E3 Optuna-winner post-hoc training jobs: 16/16
+- E4 Optuna-winner post-hoc training jobs: 36/36
+- E5 Optuna-winner post-hoc neural jobs: 50/50
+- E5 Optuna-winner post-hoc Ridge jobs: 10/10
+- E5 Optuna-winner predictions: 305,088 rows; duplicate keys 0
 - E2 training jobs: 12
 - E3 training jobs: 16
 - E4 training jobs: 36
@@ -194,6 +245,9 @@ one-standard-error threshold เท่ากับ 0.793249 m จึงมีเ
 - `artifacts/e3_optuna_posthoc/fold_objectives.csv`
 - `artifacts/e3_optuna_posthoc/manifest.json`
 - `artifacts/e4_stations/E4_RESULTS.md`
+- `artifacts/e4_optuna_posthoc/E4_RESULTS.md`
+- `artifacts/e4_optuna_posthoc/station_contributions.csv`
+- `artifacts/e4_optuna_posthoc/manifest.json`
 - `artifacts/e5_final/E5_RESULTS.md`
 - `artifacts/e5_final/final_metric_summary.csv`
 - `artifacts/e5_final/s4_vs_s0_inference.csv`
@@ -201,3 +255,10 @@ one-standard-error threshold เท่ากับ 0.793249 m จึงมีเ
 - `artifacts/e5_final/persistence_skill_inference.csv`
 - `artifacts/e5_final/high_water_event_metrics.csv`
 - `artifacts/e5_final/manifest.json`
+- `artifacts/e5_optuna_posthoc/E5_RESULTS.md`
+- `artifacts/e5_optuna_posthoc/final_metric_summary.csv`
+- `artifacts/e5_optuna_posthoc/s4_vs_s0_inference.csv`
+- `artifacts/e5_optuna_posthoc/tcn_gru_vs_ridge_inference.csv`
+- `artifacts/e5_optuna_posthoc/persistence_skill_inference.csv`
+- `artifacts/e5_optuna_posthoc/high_water_event_metrics.csv`
+- `artifacts/e5_optuna_posthoc/manifest.json`

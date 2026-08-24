@@ -1,0 +1,53 @@
+{
+  "phase": "E5",
+  "status": "COMPLETE_POSTHOC_TEST_REUSE",
+  "evaluation_partition": "test_folds_and_2025_final_period",
+  "test_results_opened": true,
+  "researcher_approval_recorded": true,
+  "selected_strategy": "mimo",
+  "selected_architecture": "tcn_gru",
+  "selected_lookback_days": 60,
+  "station_sets": [
+    "S0",
+    "S4"
+  ],
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82
+  ],
+  "folds": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "final_period"
+  ],
+  "high_water_thresholds": [
+    "official_alarm",
+    "train_q90",
+    "train_q95"
+  ],
+  "bootstrap_repetitions": 2000,
+  "predictively_useful_horizon_days": null,
+  "primary_block_length_days": 30,
+  "sensitivity_block_lengths_days": [
+    14,
+    60
+  ],
+  "protocol_deviations_inherited": [
+    "The Optuna-derived E2/E3 configuration was selected after the frozen E5 test results had already been opened; this E5 run reuses those test partitions and is exploratory only."
+  ],
+  "config_sha256": "25b6c8d03fd021de7bd7778c33bf4d913ab5e91a6141595537d446d8a6241dd0",
+  "e4_manifest_sha256": "1cd9a2294e7239baa48408c14941c27ec9a42da279f0fe62baf4bd89d7bad66c",
+  "training_jobs": 50,
+  "ridge_jobs": 10,
+  "ridge_inference_file": "tcn_gru_vs_ridge_inference.csv",
+  "post_hoc": true,
+  "post_hoc_reason": "E5 test results were already opened before the Optuna-derived E5 configuration was evaluated.",
+  "does_not_replace_frozen_e2_e5": true,
+  "test_results_already_opened_before_run": true,
+  "interpretation": "exploratory_test_reuse"
+}
