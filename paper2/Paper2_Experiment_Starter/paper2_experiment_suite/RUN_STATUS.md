@@ -36,14 +36,16 @@ superior to the frozen LSTM. See
 
 ## Automated verification
 
-- Local unit-test verification: **41/41 passed**.
-- Verification runtime: **Python 3.12.13**.
-- Local synthetic end-to-end smoke test: **PASS**; its scores are pipeline
-  checks, not research results.
-- The verification commands do not run E1–E5, Optuna search, or neural
-  training.
-- Local success does **not** count as CI success. CI is pending/failed until the
-  corresponding GitHub Actions run completes successfully.
+- GitHub Actions: **PASS**
+- Verified commit: `8f248b36de189b37d8cbd107d61d9b8d2fc9e491`
+- Workflow: `Paper 2 tests`
+- Run URL: `https://github.com/tanapattara/research-comparative-model/actions/runs/32705506499`
+- Unit tests: **41/41 passed**
+- Synthetic smoke test: **PASS**
+- CI runtime: Python 3.12
+- Private dataset was reconstructed in temporary runner storage and was not
+  uploaded or committed.
+- The workflow did not run E1–E5, Optuna search, or research/neural training.
 
 ## Missing reproducibility metadata
 
@@ -66,5 +68,3 @@ cannot reproduce every post-hoc number from the Git commit alone. See
    2026 holdout when it becomes available.
 3. Add authoritative citations for station-specific gauge datums and document
    the Paper 1 alarm-height correction in the final manuscript.
-4. Treat GitHub Actions as passed only after the workflow reports success for
-   the relevant commit.
