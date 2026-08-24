@@ -1,0 +1,62 @@
+name: Paper 2 tests
+
+on:
+  push:
+    branches:
+      - P2
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Python 3.12 verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: paper2/Paper2_Experiment_Starter/paper2_experiment_suite
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: paper2/Paper2_Experiment_Starter/paper2_experiment_suite/pyproject.toml
+
+      - name: Install test dependencies, PyTorch, and Optuna
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[tuning]"
+
+      - name: Reconstruct private dataset in runner temporary storage
+        env:
+          PRIVATE_DATA_DIR: ${{ runner.temp }}/paper2-private
+        run: |
+          mkdir -p "$PRIVATE_DATA_DIR"
+          python -m paper2_forecast.run_prepare_data \
+            --raw-directory "${{ github.workspace }}/P1/data" \
+            --output "$PRIVATE_DATA_DIR/mekong_daily_2007_2025_raw_missing.csv" \
+            --manifest "$PRIVATE_DATA_DIR/reconstruction_manifest.json"
+
+      - name: Run exactly 41 unit tests
+        run: |
+          python - <<'PY'
+          import sys
+          import unittest
+
+          suite = unittest.defaultTestLoader.discover("tests")
+          count = suite.countTestCases()
+          if count != 41:
+              raise SystemExit(f"Expected 41 tests, discovered {count}")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+      - name: Run synthetic smoke test only
+        run: python -m paper2_forecast.run_smoke --config configs/smoke.yaml

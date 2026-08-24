@@ -1,37 +1,90 @@
-# Exploratory E4/E5 post-hoc evidence
+# Exploratory E4/E5 post-hoc evidence package
 
-This directory preserves small, non-private evidence copied byte-for-byte from
-the completed post-hoc artifact directories. It supports the reported values
-without committing row-level predictions, the private dataset, checkpoints,
-the Optuna SQLite database, credentials, or a virtual environment.
+## Purpose and interpretation
 
-The evidence chain is:
+This directory preserves a small, reviewable evidence package copied
+byte-for-byte from the completed post-hoc artifact directories. Its purpose is
+to preserve provenance, selected configurations, job counts, aggregate results,
+and file hashes without committing private or high-volume artifacts.
 
-1. `manifests/e2_optuna_posthoc_manifest.json` and
-   `selections/architecture_ranking.csv` record the post-hoc architecture
-   search and the TCN-GRU selection.
-2. `manifests/e3_optuna_posthoc_manifest.json` and
-   `selections/lookback_selection.csv` record the 60-day look-back selection.
-3. `manifests/e4_optuna_posthoc_manifest.json` and the E4 summaries record the
-   validation-only station ablation.
-4. `manifests/e5_optuna_posthoc_manifest.json` and the E5 summaries record the
-   exploratory reuse of the already-opened test partitions.
+The package documents an **exploratory post-hoc chain**. E2/E3 Optuna work was
+performed after the frozen E5 results had already been opened. E4 is a
+validation-only sensitivity analysis, and E5 reuses the already-opened test
+partitions. This is post-hoc test reuse, not independent confirmatory evidence.
+It does not replace the frozen MIMO + LSTM + 7-day chain, and it must not be used
+to claim that TCN-GRU is superior to the frozen LSTM.
 
-The E4/E5 configuration SHA-256 is
-`25b6c8d03fd021de7bd7778c33bf4d913ab5e91a6141595537d446d8a6241dd0`,
-matching `configs/e4_e5_optuna_posthoc.yaml`. The private input data are not
-included; their SHA-256 recorded by the original manifests is
-`68369e847639ffc50ef0ff0fc94aadd62e04388589207598650e360c7dad7be4`.
+## Package contents
 
+### Manifests
 
-The E2 Optuna configuration SHA-256
-`7b24a6317101c52dfe50363d93ef519cb3f4edccf129eab142b54722f582fb5f`
-matches `configs/e2_e5.yaml` at commit `341d3d6`. The E3 run used the later
-tracked version whose SHA-256 is
-`8899ce7b2da221a276baa520893b34690c11bebe6419f8043d172e8e95aee3fa`.
-`VERIFICATION_ENVIRONMENT.md` records the environment used for the 41-test
-regression verification in this amendment. It is not presented as a recovered
-snapshot of the historical training environment. See `DATA_METADATA.md` for
-non-private data provenance, `MISSING_ARTIFACTS.md` for the remaining limits,
-and `ARTIFACT_INVENTORY.csv` for SHA-256 checksums of every copied result
-artifact.
+- `manifests/e2_optuna_posthoc_manifest.json` — E2 Optuna search provenance,
+  trial/job counts, configuration hashes, and selected TCN-GRU trial
+- `manifests/e3_optuna_posthoc_manifest.json` — look-back sensitivity provenance
+- `manifests/e4_optuna_posthoc_manifest.json` — validation-only station-ablation
+  provenance
+- `manifests/e5_optuna_posthoc_manifest.json` — exploratory test-reuse provenance
+
+### Selections
+
+- `selections/architecture_ranking.csv` — post-hoc architecture ranking
+- `selections/lookback_selection.csv` — post-hoc look-back comparison and
+  selection
+
+### Summaries
+
+- `summaries/e4_metric_summary.csv`
+- `summaries/e4_station_contributions.csv`
+- `summaries/e5_final_metric_summary.csv`
+- `summaries/e5_persistence_skill_inference.csv`
+- `summaries/e5_s4_vs_s0_inference.csv`
+- `summaries/e5_tcn_gru_vs_ridge_inference.csv`
+- `summaries/e5_high_water_event_metrics.csv`
+
+`DATA_METADATA.md` records non-private data provenance, and
+`VERIFICATION_ENVIRONMENT.md` records the later 41-test amendment environment.
+The latter is not a recovered snapshot of the historical training environment.
+
+## Verify SHA-256 checksums
+
+`ARTIFACT_INVENTORY.csv` contains each committed evidence file's relative path,
+byte count, expected SHA-256, original source path, and whether the copied file
+matched its source when the inventory was created.
+
+From this directory in PowerShell:
+
+```powershell
+Import-Csv ARTIFACT_INVENTORY.csv | ForEach-Object {
+    $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.file).Hash.ToLowerInvariant()
+    if ($actual -ne $_.sha256) {
+        throw "SHA-256 mismatch: $($_.file)"
+    }
+}
+```
+
+No output means all listed hashes match. The `source_match` column records the
+copy-time comparison; it does not make the external source artifact available
+from Git.
+
+## Intentionally excluded data and artifacts
+
+The following are deliberately not committed:
+
+- private/raw station data and the reconstructed private dataset;
+- row-level E4/E5 predictions;
+- model checkpoints;
+- the Optuna SQLite database;
+- credentials; and
+- virtual environments.
+
+The original post-hoc manifests also lack the historical Python executable,
+operating-system details, and a complete package snapshot. See
+[MISSING_ARTIFACTS.md](MISSING_ARTIFACTS.md) for the authoritative list and its
+consequences.
+
+Because these inputs, detailed outputs, model states, tuning database, and
+environment metadata are absent, **the complete post-hoc results cannot be
+recomputed from this Git commit alone**. This package supports provenance and
+limited aggregate verification only. Confirmatory evaluation requires a
+configuration frozen in advance and a genuinely unseen prospective holdout,
+such as the planned complete 2026 holdout.
