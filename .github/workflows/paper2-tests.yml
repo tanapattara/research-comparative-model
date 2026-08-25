@@ -29,10 +29,19 @@ jobs:
           cache: pip
           cache-dependency-path: paper2/Paper2_Experiment_Starter/paper2_experiment_suite/pyproject.toml
 
-      - name: Install test dependencies, PyTorch, and Optuna
+      - name: Install test, model, tuning, and manuscript dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[tuning]"
+          python -m pip install -e ".[tuning,manuscript]"
+
+      - name: Check frozen manuscript figure sources
+        run: python manuscript/scripts/generate_manuscript_figures.py --check
+
+      - name: Render manuscript figures in runner temporary storage
+        run: |
+          python manuscript/scripts/generate_manuscript_figures.py \
+            --output-dir "${RUNNER_TEMP}/paper2-manuscript-figures"
+          test "$(find "${RUNNER_TEMP}/paper2-manuscript-figures" -maxdepth 1 -type f | wc -l)" -eq 16
 
       - name: Reconstruct private dataset in runner temporary storage
         env:

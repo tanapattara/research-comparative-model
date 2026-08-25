@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "paper2-mekong-forecast"
 version = "0.1.0"
-description = "Leakage-safe starter suite for multi-station, multi-horizon Nong Khai water-level forecasting"
+description = "Leakage-aware starter suite for multi-station, multi-horizon Nong Khai water-level forecasting"
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=1.26",
@@ -17,6 +17,7 @@ dependencies = [
 [project.optional-dependencies]
 neural = ["torch>=2.3,<3"]
 tuning = ["torch>=2.3,<3", "optuna>=4,<5"]
+manuscript = ["matplotlib>=3.8,<4"]
 dev = ["pytest>=8", "ruff>=0.6"]
 
 [tool.setuptools.packages.find]

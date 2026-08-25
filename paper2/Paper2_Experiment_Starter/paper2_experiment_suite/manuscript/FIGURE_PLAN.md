@@ -12,7 +12,7 @@
 
 ## Figure 1. Experimental workflow and frozen decision chain
 
-**Purpose.** Show the leakage-safe sequence from data audit through final-period evaluation and make the frozen decisions visible.
+**Purpose.** Show the leakage-aware sequence from data audit through final-period evaluation and make the frozen decisions visible.
 
 **Proposed panels.**
 
