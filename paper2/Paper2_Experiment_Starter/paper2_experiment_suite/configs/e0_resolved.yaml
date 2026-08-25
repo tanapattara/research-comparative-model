@@ -1,0 +1,60 @@
+phase: E0
+
+data:
+  csv_path: "../data/private/mekong_daily_2007_2025_raw_missing.csv"
+  raw_station_directory: "../../../../P1/data"
+  preprocessing_source: "../src/paper2_forecast/raw_dataset.py"
+  date_column: date
+  stations: [CSA, LUA, CKH, VIE, NON]
+  target: NON
+  source_kind: "Paper 2 raw-preserved reconstruction from Paper 1 station files"
+  known_global_interpolation_before_split: false
+  zero_values_are_missing_candidates: true
+
+station_metadata:
+  CSA: {name: Chiang Saen, unit: m, unit_status: verified, datum: "station-specific local gauge datum; researcher-confirmed"}
+  LUA: {name: Luang Prabang, unit: m, unit_status: verified, datum: "station-specific local gauge datum; researcher-confirmed"}
+  CKH: {name: Chiang Khan, unit: m, unit_status: verified, datum: "station-specific local gauge datum; researcher-confirmed"}
+  VIE: {name: Vientiane, unit: m, unit_status: verified, datum: "station-specific local gauge datum; researcher-confirmed"}
+  NON: {name: Nong Khai, unit: m, unit_status: verified, datum: "zero gauge 153.6 m MSL; researcher-confirmed"}
+
+nong_khai_thresholds:
+  zero_gauge_elevation_m_msl: 153.6
+  alarm_elevation_m_msl: 165.0
+  stated_alarm_gauge_height_m: 11.4
+  flood_elevation_m_msl: 165.8
+  stated_flood_gauge_height_m: 12.2
+
+forecast:
+  output_days: 14
+  lookback_days: [7, 14, 30, 60]
+  report_horizons: [1, 3, 5, 7, 14]
+
+folds:
+  - {name: A, train: ["2007-01-01", "2016-12-31"], validation: ["2017-01-01", "2017-12-31"], test: ["2018-01-01", "2018-12-31"]}
+  - {name: B, train: ["2007-01-01", "2018-12-31"], validation: ["2019-01-01", "2019-12-31"], test: ["2020-01-01", "2020-12-31"]}
+  - {name: C, train: ["2007-01-01", "2020-12-31"], validation: ["2021-01-01", "2021-12-31"], test: ["2022-01-01", "2022-12-31"]}
+  - {name: D, train: ["2007-01-01", "2022-12-31"], validation: ["2023-01-01", "2023-12-31"], test: ["2024-01-01", "2024-12-31"]}
+  - {name: final_period, train: ["2007-01-01", "2023-12-31"], validation: ["2024-01-01", "2024-12-31"], test: ["2025-01-01", "2025-11-11"]}
+
+policies:
+  zero_means_missing: true
+  interpolate_before_split: false
+  missing_input_policy_frozen: true
+  missing_input_policy: "primary complete-case LxS window exclusion using S4 origins"
+  sensitivity_missing_input_policy: "causal forward fill, limit 1 day, fitted/applied within fold"
+  impute_missing_target: false
+  scaler_fit_scope: train_only
+  clip_validation_test: false
+  common_forecast_origins: true
+  common_origin_reference: S4
+  purge_days: 14
+
+confirmation:
+  confirmed_by: researcher
+  confirmed_date: "2026-08-20"
+  notes: "Units/datum and Nong Khai elevations confirmed by user; exact upstream zero elevations should still be cited in the manuscript metadata table."
+
+output:
+  manifest: "../artifacts/e0/data_manifest.json"
+  report: "../reports/e0_data_audit.md"

@@ -1,0 +1,4 @@
+architecture,objective_mean_MAE_m
+lstm,0.7756644507771737
+compact_transformer,0.8153742044250386
+tcn_gru,0.9738818911581184

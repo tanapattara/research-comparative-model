@@ -1,0 +1,664 @@
+{
+  "schema_version": "1.0",
+  "phase": "E0",
+  "status": "PASS",
+  "generated_at_utc": "2026-08-20T14:06:17.459965+00:00",
+  "purpose": "Real-data integrity gate only; no model was trained and synthetic scores are not research results.",
+  "run_identity": {
+    "model": null,
+    "station_set": "S4_audit",
+    "seed": null,
+    "lookback_days": null,
+    "fold": "all_defined_folds",
+    "config_path": "D:\\repo\\research-comparative-model\\paper2\\Paper2_Experiment_Starter\\paper2_experiment_suite\\configs\\e0_resolved.yaml",
+    "config_sha256": "37b35b22daefb1e663f8e9815923274537b816a6142f035144a946fbb9ef966e"
+  },
+  "dataset": {
+    "path": "D:\\repo\\research-comparative-model\\paper2\\Paper2_Experiment_Starter\\paper2_experiment_suite\\data\\private\\mekong_daily_2007_2025_raw_missing.csv",
+    "sha256": "68369e847639ffc50ef0ff0fc94aadd62e04388589207598650e360c7dad7be4",
+    "bytes": 245499,
+    "source_kind": "Paper 2 raw-preserved reconstruction from Paper 1 station files",
+    "processed_audit": {
+      "rows": 6890,
+      "actual_columns": [
+        "date",
+        "CSA",
+        "LUA",
+        "CKH",
+        "VIE",
+        "NON"
+      ],
+      "expected_columns": [
+        "date",
+        "CSA",
+        "LUA",
+        "CKH",
+        "VIE",
+        "NON"
+      ],
+      "exact_schema_and_order": true,
+      "missing_columns": [],
+      "extra_columns": [],
+      "date_source_dtype": "str",
+      "date_parsed_dtype": "datetime64[us]",
+      "invalid_dates": 0,
+      "duplicate_dates": 0,
+      "chronological": true,
+      "start": "2007-01-01",
+      "end": "2025-11-11",
+      "missing_calendar_days": 0,
+      "missing_calendar_dates": [],
+      "stations": {
+        "CSA": {
+          "column_present": true,
+          "source_dtype": "float64",
+          "parsed_dtype": "float64",
+          "missing_or_non_numeric": 263,
+          "invalid_numeric": 0,
+          "non_finite": 0,
+          "zero_values": 0,
+          "observed_rows": 6627,
+          "observed_start": "2007-01-01",
+          "observed_end": "2025-11-11",
+          "minimum": 0.96,
+          "maximum": 10.57
+        },
+        "LUA": {
+          "column_present": true,
+          "source_dtype": "float64",
+          "parsed_dtype": "float64",
+          "missing_or_non_numeric": 313,
+          "invalid_numeric": 0,
+          "non_finite": 0,
+          "zero_values": 0,
+          "observed_rows": 6577,
+          "observed_start": "2007-01-01",
+          "observed_end": "2025-11-10",
+          "minimum": 2.47,
+          "maximum": 20.38
+        },
+        "CKH": {
+          "column_present": true,
+          "source_dtype": "float64",
+          "parsed_dtype": "float64",
+          "missing_or_non_numeric": 433,
+          "invalid_numeric": 0,
+          "non_finite": 0,
+          "zero_values": 0,
+          "observed_rows": 6457,
+          "observed_start": "2007-01-01",
+          "observed_end": "2025-11-11",
+          "minimum": 2.07,
+          "maximum": 16.8
+        },
+        "VIE": {
+          "column_present": true,
+          "source_dtype": "float64",
+          "parsed_dtype": "float64",
+          "missing_or_non_numeric": 384,
+          "invalid_numeric": 0,
+          "non_finite": 0,
+          "zero_values": 0,
+          "observed_rows": 6506,
+          "observed_start": "2007-01-01",
+          "observed_end": "2025-11-10",
+          "minimum": 0.02,
+          "maximum": 13.67
+        },
+        "NON": {
+          "column_present": true,
+          "source_dtype": "float64",
+          "parsed_dtype": "float64",
+          "missing_or_non_numeric": 253,
+          "invalid_numeric": 0,
+          "non_finite": 0,
+          "zero_values": 0,
+          "observed_rows": 6637,
+          "observed_start": "2007-01-01",
+          "observed_end": "2025-11-11",
+          "minimum": 0.32,
+          "maximum": 13.82
+        }
+      }
+    }
+  },
+  "raw_sources": {
+    "directory": "D:\\repo\\research-comparative-model\\P1\\data",
+    "missing_files": [],
+    "common_range": {
+      "start": "2007-01-01",
+      "end": "2025-11-10",
+      "calendar_days": 6889,
+      "complete_case_days": 6299,
+      "days_with_any_station_missing": 590,
+      "missing_values_by_station": {
+        "CSA": 263,
+        "LUA": 312,
+        "CKH": 433,
+        "VIE": 383,
+        "NON": 253
+      }
+    },
+    "stations": {
+      "CSA": {
+        "path": "D:\\repo\\research-comparative-model\\P1\\data\\CSA.csv",
+        "sha256": "347c56b45df98333a1a23928fa1ab406730c7546373e6f4dd4f55984ae1db069",
+        "rows_in_wide_source": 365,
+        "year_columns": [
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "zero_value_missing_candidates": 308,
+        "blank_or_non_numeric_missing_candidates": 0,
+        "invalid_calendar_cells": 0,
+        "duplicate_observation_dates": 0,
+        "observed_nonzero_days": 6992,
+        "observed_start": "2006-01-01",
+        "observed_end": "2025-11-11",
+        "missing_days_within_common_range": 263,
+        "first_missing_dates_within_common_range": [
+          "2007-07-01",
+          "2007-09-01",
+          "2008-02-29",
+          "2012-02-29",
+          "2014-01-01",
+          "2014-01-02",
+          "2014-01-03",
+          "2014-01-04",
+          "2014-01-05",
+          "2014-01-06",
+          "2014-01-07",
+          "2014-01-08",
+          "2014-01-09",
+          "2014-01-10",
+          "2014-01-11",
+          "2014-01-12",
+          "2014-01-13",
+          "2014-01-14",
+          "2014-01-15",
+          "2014-01-16"
+        ]
+      },
+      "LUA": {
+        "path": "D:\\repo\\research-comparative-model\\P1\\data\\LUA.csv",
+        "sha256": "16df19c3d08dd692846580b4703df788a3f4448fa6eaad58178d841d77752675",
+        "rows_in_wide_source": 365,
+        "year_columns": [
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "zero_value_missing_candidates": 359,
+        "blank_or_non_numeric_missing_candidates": 0,
+        "invalid_calendar_cells": 0,
+        "duplicate_observation_dates": 0,
+        "observed_nonzero_days": 6941,
+        "observed_start": "2006-01-02",
+        "observed_end": "2025-11-10",
+        "missing_days_within_common_range": 312,
+        "first_missing_dates_within_common_range": [
+          "2008-02-29",
+          "2012-02-29",
+          "2014-01-01",
+          "2014-01-02",
+          "2014-01-03",
+          "2014-01-04",
+          "2014-01-05",
+          "2014-01-06",
+          "2014-01-07",
+          "2014-01-08",
+          "2014-01-09",
+          "2014-01-10",
+          "2014-01-11",
+          "2014-01-12",
+          "2014-01-13",
+          "2014-01-14",
+          "2014-01-15",
+          "2014-01-16",
+          "2014-01-17",
+          "2014-01-18"
+        ]
+      },
+      "CKH": {
+        "path": "D:\\repo\\research-comparative-model\\P1\\data\\CKH.csv",
+        "sha256": "66edf772c4132d8f3fe7e53f9f5b271231c661dab3a9d3803f0125db3261566e",
+        "rows_in_wide_source": 366,
+        "year_columns": [
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "zero_value_missing_candidates": 843,
+        "blank_or_non_numeric_missing_candidates": 0,
+        "invalid_calendar_cells": 20,
+        "duplicate_observation_dates": 0,
+        "observed_nonzero_days": 6457,
+        "observed_start": "2007-01-01",
+        "observed_end": "2025-11-11",
+        "missing_days_within_common_range": 433,
+        "first_missing_dates_within_common_range": [
+          "2007-06-01",
+          "2007-06-02",
+          "2007-06-03",
+          "2007-06-04",
+          "2007-06-05",
+          "2007-06-06",
+          "2007-06-07",
+          "2007-06-08",
+          "2007-06-09",
+          "2007-06-10",
+          "2007-06-11",
+          "2007-06-12",
+          "2007-06-13",
+          "2007-06-14",
+          "2007-06-15",
+          "2007-06-16",
+          "2007-06-17",
+          "2007-06-18",
+          "2007-06-19",
+          "2007-06-20"
+        ]
+      },
+      "VIE": {
+        "path": "D:\\repo\\research-comparative-model\\P1\\data\\VIE.csv",
+        "sha256": "31fb1436f226a9f7e45389fdc985cb55b85b718b3d17dbc4780600bf3387f9b2",
+        "rows_in_wide_source": 366,
+        "year_columns": [
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "zero_value_missing_candidates": 429,
+        "blank_or_non_numeric_missing_candidates": 0,
+        "invalid_calendar_cells": 20,
+        "duplicate_observation_dates": 0,
+        "observed_nonzero_days": 6871,
+        "observed_start": "2006-01-01",
+        "observed_end": "2025-11-10",
+        "missing_days_within_common_range": 383,
+        "first_missing_dates_within_common_range": [
+          "2008-02-29",
+          "2009-03-01",
+          "2009-03-02",
+          "2009-03-03",
+          "2009-03-04",
+          "2009-03-05",
+          "2009-03-06",
+          "2009-03-07",
+          "2009-03-08",
+          "2009-03-09",
+          "2009-03-10",
+          "2009-03-11",
+          "2009-03-12",
+          "2009-04-03",
+          "2009-11-11",
+          "2009-11-12",
+          "2009-11-13",
+          "2009-11-14",
+          "2009-11-15",
+          "2009-11-16"
+        ]
+      },
+      "NON": {
+        "path": "D:\\repo\\research-comparative-model\\P1\\data\\NON.csv",
+        "sha256": "7411100842f207d56776669a78dd34976217e786f1cac230327888d0394f1558",
+        "rows_in_wide_source": 365,
+        "year_columns": [
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "zero_value_missing_candidates": 248,
+        "blank_or_non_numeric_missing_candidates": 50,
+        "invalid_calendar_cells": 0,
+        "duplicate_observation_dates": 0,
+        "observed_nonzero_days": 7002,
+        "observed_start": "2006-01-01",
+        "observed_end": "2025-11-11",
+        "missing_days_within_common_range": 253,
+        "first_missing_dates_within_common_range": [
+          "2008-02-29",
+          "2012-02-29",
+          "2014-01-01",
+          "2014-01-02",
+          "2014-01-03",
+          "2014-01-04",
+          "2014-01-05",
+          "2014-01-06",
+          "2014-01-07",
+          "2014-01-08",
+          "2014-01-09",
+          "2014-01-10",
+          "2014-01-11",
+          "2014-01-12",
+          "2014-01-13",
+          "2014-01-14",
+          "2014-01-15",
+          "2014-01-16",
+          "2014-01-17",
+          "2014-01-18"
+        ]
+      }
+    }
+  },
+  "preprocessing_provenance": {
+    "path": "D:\\repo\\research-comparative-model\\paper2\\Paper2_Experiment_Starter\\paper2_experiment_suite\\src\\paper2_forecast\\raw_dataset.py",
+    "sha256": "a3cfcc5bdd0cbbdfda653861b15bda305d0241b7461fc4c8621b53557317ad56",
+    "known_global_interpolation_before_split": false,
+    "paper1_behavior": "Zeros and NaNs were converted to missing, linearly interpolated over the full series, then forward/backward filled."
+  },
+  "station_metadata": {
+    "CSA": {
+      "name": "Chiang Saen",
+      "unit": "m",
+      "unit_status": "verified",
+      "datum": "station-specific local gauge datum; researcher-confirmed"
+    },
+    "LUA": {
+      "name": "Luang Prabang",
+      "unit": "m",
+      "unit_status": "verified",
+      "datum": "station-specific local gauge datum; researcher-confirmed"
+    },
+    "CKH": {
+      "name": "Chiang Khan",
+      "unit": "m",
+      "unit_status": "verified",
+      "datum": "station-specific local gauge datum; researcher-confirmed"
+    },
+    "VIE": {
+      "name": "Vientiane",
+      "unit": "m",
+      "unit_status": "verified",
+      "datum": "station-specific local gauge datum; researcher-confirmed"
+    },
+    "NON": {
+      "name": "Nong Khai",
+      "unit": "m",
+      "unit_status": "verified",
+      "datum": "zero gauge 153.6 m MSL; researcher-confirmed"
+    }
+  },
+  "nong_khai_threshold_audit": {
+    "zero_gauge_elevation_m_msl": 153.6,
+    "alarm_elevation_m_msl": 165.0,
+    "derived_alarm_gauge_height_m": 11.4,
+    "stated_alarm_gauge_height_m": 11.4,
+    "alarm_difference_m": 0.0,
+    "flood_elevation_m_msl": 165.8,
+    "derived_flood_gauge_height_m": 12.2,
+    "stated_flood_gauge_height_m": 12.2,
+    "flood_difference_m": 0.0,
+    "alarm_consistent": true,
+    "flood_consistent": true
+  },
+  "forecast_contract": {
+    "output_days": 14,
+    "lookback_days": [
+      7,
+      14,
+      30,
+      60
+    ],
+    "report_horizons": [
+      1,
+      3,
+      5,
+      7,
+      14
+    ]
+  },
+  "fold_coverage": [
+    {
+      "name": "A",
+      "partitions": {
+        "train": {
+          "requested_start": "2007-01-01",
+          "requested_end": "2016-12-31",
+          "effective_start": "2007-01-01",
+          "effective_end": "2016-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2016-12-17"
+        },
+        "validation": {
+          "requested_start": "2017-01-01",
+          "requested_end": "2017-12-31",
+          "effective_start": "2017-01-01",
+          "effective_end": "2017-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2017-12-17"
+        },
+        "test": {
+          "requested_start": "2018-01-01",
+          "requested_end": "2018-12-31",
+          "effective_start": "2018-01-01",
+          "effective_end": "2018-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2018-12-17"
+        }
+      }
+    },
+    {
+      "name": "B",
+      "partitions": {
+        "train": {
+          "requested_start": "2007-01-01",
+          "requested_end": "2018-12-31",
+          "effective_start": "2007-01-01",
+          "effective_end": "2018-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2018-12-17"
+        },
+        "validation": {
+          "requested_start": "2019-01-01",
+          "requested_end": "2019-12-31",
+          "effective_start": "2019-01-01",
+          "effective_end": "2019-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2019-12-17"
+        },
+        "test": {
+          "requested_start": "2020-01-01",
+          "requested_end": "2020-12-31",
+          "effective_start": "2020-01-01",
+          "effective_end": "2020-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2020-12-17"
+        }
+      }
+    },
+    {
+      "name": "C",
+      "partitions": {
+        "train": {
+          "requested_start": "2007-01-01",
+          "requested_end": "2020-12-31",
+          "effective_start": "2007-01-01",
+          "effective_end": "2020-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2020-12-17"
+        },
+        "validation": {
+          "requested_start": "2021-01-01",
+          "requested_end": "2021-12-31",
+          "effective_start": "2021-01-01",
+          "effective_end": "2021-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2021-12-17"
+        },
+        "test": {
+          "requested_start": "2022-01-01",
+          "requested_end": "2022-12-31",
+          "effective_start": "2022-01-01",
+          "effective_end": "2022-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2022-12-17"
+        }
+      }
+    },
+    {
+      "name": "D",
+      "partitions": {
+        "train": {
+          "requested_start": "2007-01-01",
+          "requested_end": "2022-12-31",
+          "effective_start": "2007-01-01",
+          "effective_end": "2022-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2022-12-17"
+        },
+        "validation": {
+          "requested_start": "2023-01-01",
+          "requested_end": "2023-12-31",
+          "effective_start": "2023-01-01",
+          "effective_end": "2023-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2023-12-17"
+        },
+        "test": {
+          "requested_start": "2024-01-01",
+          "requested_end": "2024-12-31",
+          "effective_start": "2024-01-01",
+          "effective_end": "2024-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2024-12-17"
+        }
+      }
+    },
+    {
+      "name": "final_period",
+      "partitions": {
+        "train": {
+          "requested_start": "2007-01-01",
+          "requested_end": "2023-12-31",
+          "effective_start": "2007-01-01",
+          "effective_end": "2023-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2023-12-17"
+        },
+        "validation": {
+          "requested_start": "2024-01-01",
+          "requested_end": "2024-12-31",
+          "effective_start": "2024-01-01",
+          "effective_end": "2024-12-31",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2024-12-17"
+        },
+        "test": {
+          "requested_start": "2025-01-01",
+          "requested_end": "2025-11-11",
+          "effective_start": "2025-01-01",
+          "effective_end": "2025-11-11",
+          "fully_covered": true,
+          "latest_issue_date_after_14_day_purge": "2025-10-28"
+        }
+      }
+    }
+  ],
+  "policies": {
+    "zero_means_missing": true,
+    "interpolate_before_split": false,
+    "missing_input_policy_frozen": true,
+    "missing_input_policy": "primary complete-case LxS window exclusion using S4 origins",
+    "sensitivity_missing_input_policy": "causal forward fill, limit 1 day, fitted/applied within fold",
+    "impute_missing_target": false,
+    "scaler_fit_scope": "train_only",
+    "clip_validation_test": false,
+    "common_forecast_origins": true,
+    "common_origin_reference": "S4",
+    "purge_days": 14
+  },
+  "blocking_issues": [],
+  "researcher_confirmation": {
+    "confirmed_by": "researcher",
+    "confirmed_date": "2026-08-20",
+    "notes": "Units/datum and Nong Khai elevations confirmed by user; exact upstream zero elevations should still be cited in the manuscript metadata table."
+  },
+  "gate_note": "PASS authorizes E1 implementation/training under complete-case S4 origins"
+}

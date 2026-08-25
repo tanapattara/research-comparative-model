@@ -1,0 +1,439 @@
+{
+  "phase": "E2_OPTUNA_POSTHOC",
+  "status": "COMPLETE",
+  "post_hoc": true,
+  "reason": "E5 test results were already opened before this requested tuning run.",
+  "evaluation_partition": "validation_only",
+  "test_values_read_by_objective": false,
+  "test_results_were_already_opened": true,
+  "does_not_replace_frozen_e2_e5": true,
+  "trials_per_architecture": 30,
+  "pruning": "MedianPruner after at least two folds; pruned trials count toward the 30-trial Optuna budget.",
+  "search_training_budget_by_architecture": {
+    "lstm": {
+      "max_epochs": 25,
+      "early_stopping_patience": 5
+    },
+    "tcn_gru": {
+      "max_epochs": 25,
+      "early_stopping_patience": 5
+    },
+    "compact_transformer": {
+      "max_epochs": 15,
+      "early_stopping_patience": 4
+    }
+  },
+  "best_configuration_refit_budget": {
+    "max_epochs": 100,
+    "early_stopping_patience": 10
+  },
+  "objective": "mean validation MAE at horizons 7 and 14 across folds A-D",
+  "development_seed": 42,
+  "lookback_days": 60,
+  "config_sha256": "7b24a6317101c52dfe50363d93ef519cb3f4edccf129eab142b54722f582fb5f",
+  "data_sha256": "68369e847639ffc50ef0ff0fc94aadd62e04388589207598650e360c7dad7be4",
+  "e5_manifest_sha256": "8446d791fdfccebdfcf0c7efd4e66a2a9c976b62f52adb8a58d6eeb803c7e1f4",
+  "optuna_version": "4.9.0",
+  "studies": {
+    "lstm": {
+      "study_name": "e2_posthoc_lstm_e25",
+      "trial_counts": {
+        "RUNNING": 0,
+        "COMPLETE": 19,
+        "PRUNED": 11,
+        "FAIL": 0,
+        "WAITING": 0
+      },
+      "best_trial_number": 22,
+      "best_objective_MAE_m": 0.8019606231873071,
+      "best_params": {
+        "dropout": 0.2,
+        "learning_rate": 0.001751694640067435,
+        "batch_size": 64,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 3,
+        "hidden_size": 64,
+        "num_layers": 1
+      },
+      "best_model_config": {
+        "architecture": "lstm",
+        "input_size": 5,
+        "output_size": 14,
+        "hidden_size": 64,
+        "num_layers": 1,
+        "dropout": 0.2,
+        "learning_rate": 0.001751694640067435,
+        "batch_size": 64,
+        "max_epochs": 25,
+        "early_stopping_patience": 5,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 3,
+        "conv_channels": 32,
+        "kernel_size": 3,
+        "model_dimension": 32,
+        "attention_heads": 4,
+        "feedforward_dimension": 64,
+        "maximum_lookback": 60
+      },
+      "best_user_attrs": {
+        "fold_A_best_epoch": 22,
+        "fold_A_objective_MAE_m": 0.853399043504175,
+        "fold_B_best_epoch": 25,
+        "fold_B_objective_MAE_m": 0.7116801826030976,
+        "fold_C_best_epoch": 19,
+        "fold_C_objective_MAE_m": 0.7874458084295801,
+        "fold_D_best_epoch": 10,
+        "fold_D_objective_MAE_m": 0.8553174582123757,
+        "model_config": {
+          "architecture": "lstm",
+          "input_size": 5,
+          "output_size": 14,
+          "hidden_size": 64,
+          "num_layers": 1,
+          "dropout": 0.2,
+          "learning_rate": 0.001751694640067435,
+          "batch_size": 64,
+          "max_epochs": 25,
+          "early_stopping_patience": 5,
+          "scheduler_factor": 0.5,
+          "scheduler_patience": 3,
+          "conv_channels": 32,
+          "kernel_size": 3,
+          "model_dimension": 32,
+          "attention_heads": 4,
+          "feedforward_dimension": 64,
+          "maximum_lookback": 60
+        },
+        "parameter_count": 19086
+      },
+      "search_max_epochs": 25,
+      "search_early_stopping_patience": 5,
+      "best_refit": {
+        "architecture": "lstm",
+        "best_trial_number": 22,
+        "search_objective_MAE_m": 0.8019606231873071,
+        "refit_objective_MAE_m": 0.7874799757128839,
+        "max_epochs": 100,
+        "early_stopping_patience": 10,
+        "model_config": {
+          "architecture": "lstm",
+          "input_size": 5,
+          "output_size": 14,
+          "hidden_size": 64,
+          "num_layers": 1,
+          "dropout": 0.2,
+          "learning_rate": 0.001751694640067435,
+          "batch_size": 64,
+          "max_epochs": 100,
+          "early_stopping_patience": 10,
+          "scheduler_factor": 0.5,
+          "scheduler_patience": 3,
+          "conv_channels": 32,
+          "kernel_size": 3,
+          "model_dimension": 32,
+          "attention_heads": 4,
+          "feedforward_dimension": 64,
+          "maximum_lookback": 60
+        },
+        "fold_records": [
+          {
+            "fold": "A",
+            "objective_MAE_m": 0.7954764536064822,
+            "best_epoch": 53,
+            "best_validation_loss": 0.004505063407123089,
+            "parameter_count": 19086
+          },
+          {
+            "fold": "B",
+            "objective_MAE_m": 0.7116801826030976,
+            "best_epoch": 25,
+            "best_validation_loss": 0.0037999781779944897,
+            "parameter_count": 19086
+          },
+          {
+            "fold": "C",
+            "objective_MAE_m": 0.7874458084295801,
+            "best_epoch": 19,
+            "best_validation_loss": 0.005123132839798927,
+            "parameter_count": 19086
+          },
+          {
+            "fold": "D",
+            "objective_MAE_m": 0.8553174582123757,
+            "best_epoch": 10,
+            "best_validation_loss": 0.01358790509402752,
+            "parameter_count": 19086
+          }
+        ]
+      }
+    },
+    "tcn_gru": {
+      "study_name": "e2_posthoc_tcn_gru_e25",
+      "trial_counts": {
+        "RUNNING": 0,
+        "COMPLETE": 18,
+        "PRUNED": 12,
+        "FAIL": 0,
+        "WAITING": 0
+      },
+      "best_trial_number": 15,
+      "best_objective_MAE_m": 0.777779488866704,
+      "best_params": {
+        "dropout": 0.0,
+        "learning_rate": 0.0007541958168385928,
+        "batch_size": 64,
+        "scheduler_factor": 0.3,
+        "scheduler_patience": 3,
+        "hidden_size": 32,
+        "num_layers": 2,
+        "conv_channels": 64,
+        "kernel_size": 3
+      },
+      "best_model_config": {
+        "architecture": "tcn_gru",
+        "input_size": 5,
+        "output_size": 14,
+        "hidden_size": 32,
+        "num_layers": 2,
+        "dropout": 0.0,
+        "learning_rate": 0.0007541958168385928,
+        "batch_size": 64,
+        "max_epochs": 25,
+        "early_stopping_patience": 5,
+        "scheduler_factor": 0.3,
+        "scheduler_patience": 3,
+        "conv_channels": 64,
+        "kernel_size": 3,
+        "model_dimension": 32,
+        "attention_heads": 4,
+        "feedforward_dimension": 64,
+        "maximum_lookback": 60
+      },
+      "best_user_attrs": {
+        "fold_A_best_epoch": 25,
+        "fold_A_objective_MAE_m": 0.8202948216083166,
+        "fold_B_best_epoch": 12,
+        "fold_B_objective_MAE_m": 0.7225362329906033,
+        "fold_C_best_epoch": 20,
+        "fold_C_objective_MAE_m": 0.7535685791962844,
+        "fold_D_best_epoch": 12,
+        "fold_D_objective_MAE_m": 0.8147183216716114,
+        "model_config": {
+          "architecture": "tcn_gru",
+          "input_size": 5,
+          "output_size": 14,
+          "hidden_size": 32,
+          "num_layers": 2,
+          "dropout": 0.0,
+          "learning_rate": 0.0007541958168385928,
+          "batch_size": 64,
+          "max_epochs": 25,
+          "early_stopping_patience": 5,
+          "scheduler_factor": 0.3,
+          "scheduler_patience": 3,
+          "conv_channels": 64,
+          "kernel_size": 3,
+          "model_dimension": 32,
+          "attention_heads": 4,
+          "feedforward_dimension": 64,
+          "maximum_lookback": 60
+        },
+        "parameter_count": 23246
+      },
+      "search_max_epochs": 25,
+      "search_early_stopping_patience": 5,
+      "best_refit": {
+        "architecture": "tcn_gru",
+        "best_trial_number": 15,
+        "search_objective_MAE_m": 0.777779488866704,
+        "refit_objective_MAE_m": 0.77021655491196,
+        "max_epochs": 100,
+        "early_stopping_patience": 10,
+        "model_config": {
+          "architecture": "tcn_gru",
+          "input_size": 5,
+          "output_size": 14,
+          "hidden_size": 32,
+          "num_layers": 2,
+          "dropout": 0.0,
+          "learning_rate": 0.0007541958168385928,
+          "batch_size": 64,
+          "max_epochs": 100,
+          "early_stopping_patience": 10,
+          "scheduler_factor": 0.3,
+          "scheduler_patience": 3,
+          "conv_channels": 64,
+          "kernel_size": 3,
+          "model_dimension": 32,
+          "attention_heads": 4,
+          "feedforward_dimension": 64,
+          "maximum_lookback": 60
+        },
+        "fold_records": [
+          {
+            "fold": "A",
+            "objective_MAE_m": 0.8042651675964568,
+            "best_epoch": 45,
+            "best_validation_loss": 0.00449973763898015,
+            "parameter_count": 23246
+          },
+          {
+            "fold": "B",
+            "objective_MAE_m": 0.7225362329906033,
+            "best_epoch": 12,
+            "best_validation_loss": 0.004414237104356289,
+            "parameter_count": 23246
+          },
+          {
+            "fold": "C",
+            "objective_MAE_m": 0.7393464973891685,
+            "best_epoch": 33,
+            "best_validation_loss": 0.004948257002979517,
+            "parameter_count": 23246
+          },
+          {
+            "fold": "D",
+            "objective_MAE_m": 0.8147183216716114,
+            "best_epoch": 12,
+            "best_validation_loss": 0.012057161889970303,
+            "parameter_count": 23246
+          }
+        ]
+      }
+    },
+    "compact_transformer": {
+      "study_name": "e2_posthoc_compact_transformer_e15",
+      "trial_counts": {
+        "RUNNING": 0,
+        "COMPLETE": 21,
+        "PRUNED": 9,
+        "FAIL": 0,
+        "WAITING": 0
+      },
+      "best_trial_number": 27,
+      "best_objective_MAE_m": 0.8080747533872901,
+      "best_params": {
+        "dropout": 0.4,
+        "learning_rate": 0.002074349157764158,
+        "batch_size": 128,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 5,
+        "model_dimension": 64,
+        "feedforward_multiplier": 4,
+        "num_layers": 2,
+        "attention_heads": 8
+      },
+      "best_model_config": {
+        "architecture": "compact_transformer",
+        "input_size": 5,
+        "output_size": 14,
+        "hidden_size": 64,
+        "num_layers": 2,
+        "dropout": 0.4,
+        "learning_rate": 0.002074349157764158,
+        "batch_size": 128,
+        "max_epochs": 15,
+        "early_stopping_patience": 4,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 5,
+        "conv_channels": 32,
+        "kernel_size": 3,
+        "model_dimension": 64,
+        "attention_heads": 8,
+        "feedforward_dimension": 256,
+        "maximum_lookback": 60
+      },
+      "best_user_attrs": {
+        "fold_A_best_epoch": 15,
+        "fold_A_objective_MAE_m": 0.8894363401382119,
+        "fold_B_best_epoch": 11,
+        "fold_B_objective_MAE_m": 0.7650733651653412,
+        "fold_C_best_epoch": 7,
+        "fold_C_objective_MAE_m": 0.8187423589954737,
+        "fold_D_best_epoch": 2,
+        "fold_D_objective_MAE_m": 0.7590469492501335,
+        "model_config": {
+          "architecture": "compact_transformer",
+          "input_size": 5,
+          "output_size": 14,
+          "hidden_size": 64,
+          "num_layers": 2,
+          "dropout": 0.4,
+          "learning_rate": 0.002074349157764158,
+          "batch_size": 128,
+          "max_epochs": 15,
+          "early_stopping_patience": 4,
+          "scheduler_factor": 0.5,
+          "scheduler_patience": 5,
+          "conv_channels": 32,
+          "kernel_size": 3,
+          "model_dimension": 64,
+          "attention_heads": 8,
+          "feedforward_dimension": 256,
+          "maximum_lookback": 60
+        },
+        "parameter_count": 105230
+      },
+      "search_max_epochs": 15,
+      "search_early_stopping_patience": 4,
+      "best_refit": {
+        "architecture": "compact_transformer",
+        "best_trial_number": 27,
+        "search_objective_MAE_m": 0.8080747533872901,
+        "refit_objective_MAE_m": 0.8041422272616197,
+        "max_epochs": 100,
+        "early_stopping_patience": 10,
+        "model_config": {
+          "architecture": "compact_transformer",
+          "input_size": 5,
+          "output_size": 14,
+          "hidden_size": 64,
+          "num_layers": 2,
+          "dropout": 0.4,
+          "learning_rate": 0.002074349157764158,
+          "batch_size": 128,
+          "max_epochs": 100,
+          "early_stopping_patience": 10,
+          "scheduler_factor": 0.5,
+          "scheduler_patience": 5,
+          "conv_channels": 32,
+          "kernel_size": 3,
+          "model_dimension": 64,
+          "attention_heads": 8,
+          "feedforward_dimension": 256,
+          "maximum_lookback": 60
+        },
+        "fold_records": [
+          {
+            "fold": "A",
+            "objective_MAE_m": 0.8737062356355307,
+            "best_epoch": 18,
+            "best_validation_loss": 0.00559194665402174,
+            "parameter_count": 105230
+          },
+          {
+            "fold": "B",
+            "objective_MAE_m": 0.7650733651653412,
+            "best_epoch": 11,
+            "best_validation_loss": 0.004447618965059519,
+            "parameter_count": 105230
+          },
+          {
+            "fold": "C",
+            "objective_MAE_m": 0.8187423589954737,
+            "best_epoch": 7,
+            "best_validation_loss": 0.005816226359456778,
+            "parameter_count": 105230
+          },
+          {
+            "fold": "D",
+            "objective_MAE_m": 0.7590469492501335,
+            "best_epoch": 2,
+            "best_validation_loss": 0.011307298205792904,
+            "parameter_count": 105230
+          }
+        ]
+      }
+    }
+  }
+}

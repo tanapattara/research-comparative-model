@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="431.941172pt" height="180.72pt" viewBox="0 0 431.941172 180.72" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-08-25</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Paper 2 frozen-evidence figure generator</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 180.72
+L 431.941172 180.72
+L 431.941172 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 30.681572 103.6656
+L 83.914772 103.6656
+Q 86.593172 103.6656 86.593172 101.00448
+L 86.593172 51.44112
+Q 86.593172 48.78 83.914772 48.78
+L 30.681572 48.78
+Q 28.003172 48.78 28.003172 51.44112
+L 28.003172 101.00448
+Q 28.003172 103.6656 30.681572 103.6656
+z
+" clip-path="url(#p51ff996b44)" style="fill: #ffffff; stroke: #56b4e9; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 87.584821 76.38912
+Q 90.608697 76.38912 92.290932 76.38912
+" clip-path="url(#p51ff996b44)" style="fill: none; stroke-dasharray: 4.44,1.92; stroke-dashoffset: 0; stroke: #d55e00; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 88.290932 74.38912
+L 92.290932 76.38912
+L 88.290932 78.38912
+z
+" clip-path="url(#p51ff996b44)" style="fill: #d55e00; stroke-dasharray: 4.44,1.92; stroke-dashoffset: 0; stroke: #d55e00; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 97.641572 103.6656
+L 150.874772 103.6656
+Q 153.553172 103.6656 153.553172 101.00448
+L 153.553172 51.44112
+Q 153.553172 48.78 150.874772 48.78
+L 97.641572 48.78
+Q 94.963172 48.78 94.963172 51.44112
+L 94.963172 101.00448
+Q 94.963172 103.6656 97.641572 103.6656
+z
+" clip-path="url(#p51ff996b44)" style="fill: #ffffff; stroke: #0072b2; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 154.544821 76.38912
+Q 157.568697 76.38912 159.250932 76.38912
+" clip-path="url(#p51ff996b44)" style="fill: none; stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 155.250932 74.38912
+L 159.250932 76.38912
+L 155.250932 78.38912
+z
+" clip-path="url(#p51ff996b44)" style="stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 164.601572 103.6656
+L 217.834772 103.6656
+Q 220.513172 103.6656 220.513172 101.00448
+L 220.513172 51.44112
+Q 220.513172 48.78 217.834772 48.78
+L 164.601572 48.78
+Q 161.923172 48.78 161.923172 51.44112
+L 161.923172 101.00448
+Q 161.923172 103.6656 164.601572 103.6656
+z
+" clip-path="url(#p51ff996b44)" style="fill: #ffffff; stroke: #d55e00; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 221.504821 76.38912
+Q 224.528697 76.38912 226.210932 76.38912
+" clip-path="url(#p51ff996b44)" style="fill: none; stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 222.210932 74.38912
+L 226.210932 76.38912
+L 222.210932 78.38912
+z
+" clip-path="url(#p51ff996b44)" style="stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 231.561572 103.6656
+L 284.794772 103.6656
+Q 287.473172 103.6656 287.473172 101.00448
+L 287.473172 51.44112
+Q 287.473172 48.78 284.794772 48.78
+L 231.561572 48.78
+Q 228.883172 48.78 228.883172 51.44112
+L 228.883172 101.00448
+Q 228.883172 103.6656 231.561572 103.6656
+z
+" clip-path="url(#p51ff996b44)" style="fill: #ffffff; stroke: #009e73; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 288.464821 76.38912
+Q 291.488697 76.38912 293.170932 76.38912
+" clip-path="url(#p51ff996b44)" style="fill: none; stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 289.170932 74.38912
+L 293.170932 76.38912
+L 289.170932 78.38912
+z
+" clip-path="url(#p51ff996b44)" style="stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 298.521572 103.6656
+L 351.754772 103.6656
+Q 354.433172 103.6656 354.433172 101.00448
+L 354.433172 51.44112
+Q 354.433172 48.78 351.754772 48.78
+L 298.521572 48.78
+Q 295.843172 48.78 295.843172 51.44112
+L 295.843172 101.00448
+Q 295.843172 103.6656 298.521572 103.6656
+z
+" clip-path="url(#p51ff996b44)" style="fill: #ffffff; stroke: #e69f00; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 355.424821 76.38912
+Q 358.448697 76.38912 360.130932 76.38912
+" clip-path="url(#p51ff996b44)" style="fill: none; stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 356.130932 74.38912
+L 360.130932 76.38912
+L 356.130932 78.38912
+z
+" clip-path="url(#p51ff996b44)" style="stroke: #000000; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 365.481572 103.6656
+L 418.714772 103.6656
+Q 421.393172 103.6656 421.393172 101.00448
+L 421.393172 51.44112
+Q 421.393172 48.78 418.714772 48.78
+L 365.481572 48.78
+Q 362.803172 48.78 362.803172 51.44112
+L 362.803172 101.00448
+Q 362.803172 103.6656 365.481572 103.6656
+z
+" clip-path="url(#p51ff996b44)" style="fill: #ffffff; stroke: #cc79a7; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #56b4e9" x="57.298172" y="61.097091" transform="rotate(-0 57.298172 61.097091)">E0</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(35.462273 75.504206)">Data integrity</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(34.180125 82.119206)">leakage-aware</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(50.194922 88.552589)">gate</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d55e00" x="90.945572" y="65.412" transform="rotate(-0 90.945572 65.412)">⚠</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0072b2" x="124.258172" y="61.097091" transform="rotate(-0 124.258172 61.097091)">E1</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(110.760914 75.448589)">Strategy</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(115.413563 82.673902)">MIMO</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(111.119719 89.344519)">retained</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d55e00" x="191.218172" y="61.097091" transform="rotate(-0 191.218172 61.097091)">E2</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(171.934266 76.114519)">Architecture</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(168.522914 82.729519)">LSTM selected</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(162.72593 88.734206)">protocol deviation</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #009e73" x="258.178172" y="61.097091" transform="rotate(-0 258.178172 61.097091)">E3</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(242.176664 76.114519)">Look-back</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(247.737398 82.119206)">7 days</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(244.731609 88.970456)">(one-SE)</text>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #e69f00" x="325.138172" y="61.097091" transform="rotate(-0 325.138172 61.097091)">E4</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(313.93943 76.114519)">Station</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(312.368859 82.729519)">ablation</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(301.771078 88.734206)">validation-only</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #cc79a7" x="392.098172" y="61.097091" transform="rotate(-0 392.098172 61.097091)">E5</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(364.205414 76.114519)">Frozen evaluation</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(365.122852 82.119206)">2025 final-period</text>
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'" transform="translate(386.049187 89.162902)">test</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 7px; font-family: 'DejaVu Sans'; fill: #d55e00" transform="translate(7.2 119.578476)">Historical E0 hash linkage unresolved</text>
+    <text style="font-weight: 700; font-size: 7px; font-family: 'DejaVu Sans'; fill: #d55e00" transform="translate(11.642266 127.98039)">(expected ≠ available; dashed link)</text>
+   </g>
+   <g id="text_15">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #009e73" x="257.341172" y="130.562135" transform="rotate(-0 257.341172 130.562135)">Verified manifest links: E1 → E2 → E3 → E4 → E5</text>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="223.861172" y="157.563042" transform="rotate(-0 223.861172 157.563042)">Frozen chain: MIMO + LSTM + 7-day look-back</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p51ff996b44">
+   <rect x="22.981172" y="7.2" width="401.76" height="166.32"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,51 @@
+phase: E4-E5-OPTUNA-POSTHOC
+
+gates:
+  e3_manifest: "../artifacts/e3_optuna_posthoc/manifest.json"
+  e4_manifest: "../artifacts/e4_optuna_posthoc/manifest.json"
+
+data:
+  csv_path: "../data/private/mekong_daily_2007_2025_raw_missing.csv"
+  stations: [CSA, LUA, CKH, VIE, NON]
+  target: NON
+  unit: m
+
+forecast:
+  strategy: mimo
+  output_days: 14
+  report_horizons: [1, 3, 5, 7, 14]
+  lookback_candidates: [7, 14, 30, 60]
+
+folds:
+  - {name: A, train_start: "2007-01-01", train_end: "2016-12-31", validation_start: "2017-01-01", validation_end: "2017-12-31", test_start: "2018-01-01", test_end: "2018-12-31", purge_days: 14}
+  - {name: B, train_start: "2007-01-01", train_end: "2018-12-31", validation_start: "2019-01-01", validation_end: "2019-12-31", test_start: "2020-01-01", test_end: "2020-12-31", purge_days: 14}
+  - {name: C, train_start: "2007-01-01", train_end: "2020-12-31", validation_start: "2021-01-01", validation_end: "2021-12-31", test_start: "2022-01-01", test_end: "2022-12-31", purge_days: 14}
+  - {name: D, train_start: "2007-01-01", train_end: "2022-12-31", validation_start: "2023-01-01", validation_end: "2023-12-31", test_start: "2024-01-01", test_end: "2024-12-31", purge_days: 14}
+  - {name: final_period, train_start: "2007-01-01", train_end: "2023-12-31", validation_start: "2024-01-01", validation_end: "2024-12-31", test_start: "2025-01-01", test_end: "2025-11-11", purge_days: 14}
+
+training:
+  hidden_size: 32
+  num_layers: 2
+  dropout: 0.0
+  learning_rate: 0.0007541958168385928
+  batch_size: 64
+  max_epochs: 100
+  early_stopping_patience: 10
+  scheduler_factor: 0.3
+  scheduler_patience: 3
+
+architectures:
+  tcn_gru:
+    conv_channels: 64
+    kernel_size: 3
+
+final_evaluation:
+  seeds: [42, 52, 62, 72, 82]
+  official_alarm_gauge_height_m: 11.4
+  bootstrap_repetitions: 2000
+  primary_block_length_days: 30
+  sensitivity_block_lengths_days: [14, 60]
+
+outputs:
+  e4: "../artifacts/e4_optuna_posthoc"
+  e5: "../artifacts/e5_optuna_posthoc"

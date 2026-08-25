@@ -1,0 +1,70 @@
+{
+  "phase": "E4",
+  "status": "COMPLETE_POSTHOC",
+  "evaluation_partition": "validation_only",
+  "test_results_opened": false,
+  "selected_architecture": "tcn_gru",
+  "selected_lookback_days": 60,
+  "station_sets": {
+    "S0": [
+      "NON"
+    ],
+    "S1": [
+      "VIE",
+      "NON"
+    ],
+    "S2": [
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S3": [
+      "LUA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4": [
+      "CSA",
+      "LUA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4-CSA": [
+      "LUA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4-LUA": [
+      "CSA",
+      "CKH",
+      "VIE",
+      "NON"
+    ],
+    "S4-CKH": [
+      "CSA",
+      "LUA",
+      "VIE",
+      "NON"
+    ],
+    "S4-VIE": [
+      "CSA",
+      "LUA",
+      "CKH",
+      "NON"
+    ]
+  },
+  "common_origin_reference": "S4",
+  "weights_retrained_for_every_station_set": true,
+  "hyperparameters_retuned": false,
+  "development_seed": 42,
+  "config_sha256": "25b6c8d03fd021de7bd7778c33bf4d913ab5e91a6141595537d446d8a6241dd0",
+  "e3_manifest_sha256": "0b026bfbfe9bfd0ac58036e2b2e7739b8d8eb30423cb00d5b30cc9bc45646110",
+  "training_jobs": 36,
+  "post_hoc": true,
+  "post_hoc_reason": "E5 test results were already opened before the Optuna-derived E4 configuration was evaluated.",
+  "does_not_replace_frozen_e2_e5": true,
+  "test_values_read": false
+}

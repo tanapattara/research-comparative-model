@@ -1,0 +1,47 @@
+{
+  "phase": "E5",
+  "status": "COMPLETE_WITH_INHERITED_PROTOCOL_DEVIATION",
+  "evaluation_partition": "test_folds_and_2025_final_period",
+  "test_results_opened": true,
+  "researcher_approval_recorded": true,
+  "selected_strategy": "mimo",
+  "selected_architecture": "lstm",
+  "selected_lookback_days": 7,
+  "station_sets": [
+    "S0",
+    "S4"
+  ],
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82
+  ],
+  "folds": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "final_period"
+  ],
+  "high_water_thresholds": [
+    "official_alarm",
+    "train_q90",
+    "train_q95"
+  ],
+  "bootstrap_repetitions": 2000,
+  "predictively_useful_horizon_days": 6,
+  "primary_block_length_days": 30,
+  "sensitivity_block_lengths_days": [
+    14,
+    60
+  ],
+  "protocol_deviations_inherited": [
+    "E2 selected architecture from fixed compact configurations without the draft 30-Optuna-trial budget."
+  ],
+  "config_sha256": "732aac703688aa4da140212e690e7b9223209c3f7b2f2e516b7493fa5815d6a3",
+  "e4_manifest_sha256": "805a608622caacce6106c1d2b4f789fae29a23310cb815c2a26c36cc81826237",
+  "training_jobs": 50,
+  "ridge_jobs": 10
+}

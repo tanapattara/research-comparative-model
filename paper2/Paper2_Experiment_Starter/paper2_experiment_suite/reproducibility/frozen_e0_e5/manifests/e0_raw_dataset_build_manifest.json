@@ -1,0 +1,78 @@
+{
+  "purpose": "Paper 2 raw-preserved daily dataset; zero is missing; no interpolation",
+  "generated_at_utc": "2026-08-20T12:17:38.912251+00:00",
+  "output_path": "D:\\repo\\research-comparative-model\\paper2\\Paper2_Experiment_Starter\\paper2_experiment_suite\\data\\private\\mekong_daily_2007_2025_raw_missing.csv",
+  "output_sha256": "68369e847639ffc50ef0ff0fc94aadd62e04388589207598650e360c7dad7be4",
+  "rows": 6890,
+  "start": "2007-01-01",
+  "end": "2025-11-11",
+  "columns": [
+    "date",
+    "CSA",
+    "LUA",
+    "CKH",
+    "VIE",
+    "NON"
+  ],
+  "interpolation_applied": false,
+  "target_imputation_applied": false,
+  "zero_interpretation": "missing",
+  "sources_unchanged": true,
+  "sources": {
+    "CSA": {
+      "path": "D:\\repo\\research-comparative-model\\P1\\data\\CSA.csv",
+      "sha256": "347c56b45df98333a1a23928fa1ab406730c7546373e6f4dd4f55984ae1db069",
+      "observed_start": "2006-01-01",
+      "observed_end": "2025-11-11",
+      "observed_non_missing": 6627,
+      "missing_in_output_range": 263,
+      "zero_values_converted_to_missing": 308,
+      "blank_or_non_numeric_missing": 0,
+      "invalid_calendar_cells": 0
+    },
+    "LUA": {
+      "path": "D:\\repo\\research-comparative-model\\P1\\data\\LUA.csv",
+      "sha256": "16df19c3d08dd692846580b4703df788a3f4448fa6eaad58178d841d77752675",
+      "observed_start": "2006-01-02",
+      "observed_end": "2025-11-10",
+      "observed_non_missing": 6577,
+      "missing_in_output_range": 313,
+      "zero_values_converted_to_missing": 359,
+      "blank_or_non_numeric_missing": 0,
+      "invalid_calendar_cells": 0
+    },
+    "CKH": {
+      "path": "D:\\repo\\research-comparative-model\\P1\\data\\CKH.csv",
+      "sha256": "66edf772c4132d8f3fe7e53f9f5b271231c661dab3a9d3803f0125db3261566e",
+      "observed_start": "2007-01-01",
+      "observed_end": "2025-11-11",
+      "observed_non_missing": 6457,
+      "missing_in_output_range": 433,
+      "zero_values_converted_to_missing": 843,
+      "blank_or_non_numeric_missing": 0,
+      "invalid_calendar_cells": 20
+    },
+    "VIE": {
+      "path": "D:\\repo\\research-comparative-model\\P1\\data\\VIE.csv",
+      "sha256": "31fb1436f226a9f7e45389fdc985cb55b85b718b3d17dbc4780600bf3387f9b2",
+      "observed_start": "2006-01-01",
+      "observed_end": "2025-11-10",
+      "observed_non_missing": 6506,
+      "missing_in_output_range": 384,
+      "zero_values_converted_to_missing": 429,
+      "blank_or_non_numeric_missing": 0,
+      "invalid_calendar_cells": 20
+    },
+    "NON": {
+      "path": "D:\\repo\\research-comparative-model\\P1\\data\\NON.csv",
+      "sha256": "7411100842f207d56776669a78dd34976217e786f1cac230327888d0394f1558",
+      "observed_start": "2006-01-01",
+      "observed_end": "2025-11-11",
+      "observed_non_missing": 6637,
+      "missing_in_output_range": 253,
+      "zero_values_converted_to_missing": 248,
+      "blank_or_non_numeric_missing": 50,
+      "invalid_calendar_cells": 0
+    }
+  }
+}
