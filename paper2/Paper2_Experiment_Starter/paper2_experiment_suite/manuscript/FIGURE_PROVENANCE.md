@@ -16,7 +16,7 @@ The five manuscript figures are deterministic visualizations of committed aggreg
 
 ## Frozen source inventory
 
-Hashes below are SHA-256 values of the exact committed files read by the generator.
+Hashes below are SHA-256 values of the frozen CRLF byte representation recorded by the evidence package. Git may normalize JSON and CSV line endings to LF on a Linux checkout, so the generator canonicalizes line endings to CRLF for hashing and lineage comparison only. This checkout-independent step reproduces the frozen source identities and recorded predecessor hashes on Windows and Linux; it neither rewrites the sources nor changes any parsed value.
 
 | Source file | SHA-256 | Figure use |
 | --- | --- | --- |

@@ -101,12 +101,26 @@ class Bundle:
     event_rows: list[dict[str, str]]
 
 
+def frozen_source_bytes(path: Path) -> bytes:
+    """Return the stable byte representation used by the frozen package.
+
+    The frozen JSON and CSV files were produced with CRLF line endings, and
+    their recorded predecessor hashes refer to those bytes. Git can normalize
+    text files to LF on a Linux checkout even though the semantic source is
+    unchanged. Canonicalizing only line endings back to CRLF keeps lineage and
+    provenance checks stable across checkout platforms; it does not rewrite a
+    source file or alter any parsed value.
+    """
+
+    data = path.read_bytes()
+    if path.suffix.lower() in {".csv", ".json"}:
+        data = data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        data = data.replace(b"\n", b"\r\n")
+    return data
+
+
 def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+    return hashlib.sha256(frozen_source_bytes(path)).hexdigest()
 
 
 def source_path(relative: str) -> Path:
@@ -1132,7 +1146,7 @@ def print_check(bundle: Bundle) -> None:
     print("Predictive-skill rows: S4 days 1-14; day 6 is farthest useful; day 7 CI crosses zero")
     print("E4 station rows: validation-only, seed 42, day 7/day 14")
     print("Event rows: train_q95 exploratory finite-cell means; undefined cells remain undefined")
-    print("Source SHA-256:")
+    print("Source SHA-256 (canonical frozen CRLF byte representation):")
     for key in SOURCE_FILES:
         print(f"  {display_path(bundle.paths[key])}  {bundle.hashes[key]}")
 
